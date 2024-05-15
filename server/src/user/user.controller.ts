@@ -8,9 +8,30 @@ export class UserController {
 
   @Post('signUp')
   async signupUser(
-    @Body() userData: { name: string; email: string },
+    @Body()
+    userData: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      password: string;
+    },
   ): Promise<User> {
-    return this.userService.create(userData);
+    const user = await this.userService.findUnique({
+      email: userData.email,
+    });
+
+    if (user) {
+      throw new Error('User already exists');
+    }
+
+    const userToCreate = {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      hashedPassword: await this.userService.hashPassword(userData.password),
+    };
+
+    return this.userService.create(userToCreate);
   }
 
   @Get('all')
