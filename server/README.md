@@ -32,6 +32,22 @@
 $ npm install
 ```
 
+## Running the db
+
+```bash
+$ docker compose up
+```
+
+## Prisma
+
+```bash
+$ npx prisma generate
+$ npx prisma db seed
+
+# if problem with prisma client
+$ npx prisma migrate reset
+```
+
 ## Running the app
 
 ```bash
