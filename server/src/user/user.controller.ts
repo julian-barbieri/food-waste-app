@@ -6,6 +6,7 @@ import { User } from '@prisma/client';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  //CREATE USER
   @Post('signUp')
   async signupUser(
     @Body()
@@ -34,8 +35,12 @@ export class UserController {
     return this.userService.create(userToCreate);
   }
 
+  //GET All USERS
   @Get('all')
   async getUsers() {
     return this.userService.findMany({});
   }
+
+  //GET USER by id
+  
 }
