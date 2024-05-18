@@ -1,46 +1,88 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { UserService } from './user.service';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+
 import { User } from '@prisma/client';
+import { UserReq } from 'src/auth/UserReq.decorator';
+import { UseJwtAuthGuards } from 'src/auth/jwt-auth.guard';
+
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserEntity } from './entities/user.entity';
+import { UserService } from './user.service';
 
 @Controller('users')
+@ApiTags('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  //CREATE USER
-  @Post('signUp')
-  async signupUser(
-    @Body()
-    userData: {
-      firstName: string;
-      lastName: string;
-      email: string;
-      password: string;
-    },
-  ): Promise<User> {
-    const user = await this.userService.findUnique({
-      email: userData.email,
-    });
+  @Post()
+  @ApiCreatedResponse({
+    type: UserEntity,
+    description: 'Create a new user',
+  })
+  async create(@Body() createUserDto: CreateUserDto) {
+    return this.userService.create(createUserDto);
+  }
 
-    if (user) {
-      throw new Error('User already exists');
+  @Get()
+  @UseJwtAuthGuards()
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    type: UserEntity,
+    isArray: true,
+    description: 'List all users',
+  })
+  async findAll(): Promise<UserEntity[]> {
+    const users = await this.userService.findAll();
+    return users.map((user) => new UserEntity(user));
+  }
+
+  @Get(':id')
+  @UseJwtAuthGuards()
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    type: UserEntity,
+    description: 'Get user by id',
+  })
+  @ApiNotFoundResponse({
+    description: 'User not found',
+  })
+  async findOne(@Param('id') id: string): Promise<UserEntity> {
+    const user = await this.userService.findOne(id);
+
+    if (!user) {
+      throw new NotFoundException(`User with id = ${id} not found`);
     }
 
-    const userToCreate = {
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      email: userData.email,
-      hashedPassword: await this.userService.hashPassword(userData.password),
-    };
-
-    return this.userService.create(userToCreate);
+    return new UserEntity(user);
   }
 
-  //GET All USERS
-  @Get('all')
-  async getUsers() {
-    return this.userService.findMany({});
+  @Patch()
+  @UseJwtAuthGuards()
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    type: UserEntity,
+    description: 'Update user',
+  })
+  async update(
+    @UserReq() userReq: User,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<UserEntity> {
+    const user = await this.userService.update(userReq.id, updateUserDto);
+    return new UserEntity(user);
   }
-
-  //GET USER by id
-  
 }

@@ -1,15 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBrandDto } from './dto/create-brand.dto';
-import { UpdateBrandDto } from './dto/update-brand.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { Brand, Prisma } from '@prisma/client';
 
+import { Prisma } from '@prisma/client';
+import { PrismaService } from 'nestjs-prisma';
+
+import { CreateBrandDto } from './dto/create-brand.dto';
 
 @Injectable()
 export class BrandService {
   constructor(private prisma: PrismaService) {}
-  create(createBrandDto: CreateBrandDto) {
-    return 'This action adds a new brand';
+
+  create(userId: string, createBrandDto: CreateBrandDto) {
+    return this.prisma.brand.create({
+      data: {
+        ...createBrandDto,
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
+      },
+    });
   }
 
   findAll() {
@@ -17,14 +27,21 @@ export class BrandService {
   }
 
   findOne(id: string) {
-    return this.prisma.brand.findUnique({ where: {id}});
+    return this.prisma.brand.findUnique({
+      where: { id },
+    });
   }
 
-  update(id: number, updateBrandDto: UpdateBrandDto) {
-    return `This action updates a #${id} brand`;
+  update(id: string, data: Prisma.BrandUpdateInput) {
+    return this.prisma.brand.update({
+      where: { id },
+      data,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} brand`;
+  remove(id: string) {
+    return this.prisma.brand.delete({
+      where: { id },
+    });
   }
 }
