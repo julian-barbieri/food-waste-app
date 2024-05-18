@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { OpenAPI } from "@/client";
+
+OpenAPI.BASE = "http://localhost:3000";
 
 const inter = Inter({ subsets: ["latin"] });
 
