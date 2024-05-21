@@ -6,9 +6,7 @@ import {
   IonToolbar,
 } from '@ionic/react';
 
-import { useAppControllerFindAll } from '../api';
-import ExploreContainer from '../components/ExploreContainer';
-import './Tab1.css';
+import { useAppControllerFindAll } from '@/api';
 
 const date = new Date().toISOString();
 
@@ -20,7 +18,14 @@ const Tab1: React.FC = () => {
     sortBy: ['string', '33'],
   });
 
-  return <IonPage>{JSON.stringify(query.data)}</IonPage>;
+  return (
+    <IonPage>
+      <div className="flex flex-col">
+        <div>{JSON.stringify(query.data)}</div>
+        <div></div>
+      </div>
+    </IonPage>
+  );
 };
 
 export default Tab1;

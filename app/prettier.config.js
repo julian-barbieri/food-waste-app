@@ -5,7 +5,7 @@ export default {
   ],
   singleQuote: true,
   trailingComma: 'all',
-  importOrder: ['^@ionic/(.*)$', '<THIRD_PARTY_MODULES>', '^[./]'],
+  importOrder: ['^@ionic/(.*)$', '<THIRD_PARTY_MODULES>', '^@/(.*)', '^[./]'],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
 };

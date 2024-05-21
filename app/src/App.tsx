@@ -1,13 +1,4 @@
-import {
-  IonApp,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  setupIonicReact,
-} from '@ionic/react';
+import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 
 /* Core CSS required for Ionic components to work properly */
@@ -28,13 +19,15 @@ import '@ionic/react/css/typography.css';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ellipse, square, triangle } from 'ionicons/icons';
 import { Redirect, Route } from 'react-router-dom';
 
-import Tab1 from './pages/Tab1';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
+import { PrivateRoute } from '@/components/PrivateRoute';
+import { TabBar } from '@/components/TabBar';
+import Login from '@/pages/Login';
+import Register from '@/pages/Register';
+
 import './theme/tailwind.css';
+import './theme/variables.css';
 
 /**
  * Ionic Dark Mode
@@ -44,18 +37,11 @@ import './theme/tailwind.css';
  */
 
 /* import '@ionic/react/css/palettes/dark.always.css'; */
-
 /* import '@ionic/react/css/palettes/dark.class.css'; */
 // import "@ionic/react/css/palettes/dark.system.css";
 
-/* Theme variables */
-import './theme/variables.css';
-
-// import { OpenAPI } from "./openapi/requests";
-
 setupIonicReact();
 
-// OpenAPI.BASE = "http://localhost:3000";
 const queryClient = new QueryClient();
 
 const AppWithQueryClient: React.FC = () => (
@@ -65,41 +51,19 @@ const AppWithQueryClient: React.FC = () => (
   </QueryClientProvider>
 );
 
-const App: React.FC = () => (
-  <IonApp>
-    <div className="md:sidebar">
+const App: React.FC = () => {
+  return (
+    <IonApp>
       <IonReactRouter>
-        <IonTabs>
-          <IonRouterOutlet>
-            <Route exact path="/tab1">
-              <Tab1 />
-            </Route>
-            <Route exact path="/tab2">
-              <Tab2 />
-            </Route>
-            <Route path="/tab3">
-              <Tab3 />
-            </Route>
-            <Route exact path="/">
-              <Redirect to="/tab1" />
-            </Route>
-          </IonRouterOutlet>
-
-          <IonTabBar slot="bottom" color={'primary'}>
-            <IonTabButton tab="tab1" href="/tab1">
-              <IonIcon aria-hidden="true" icon={triangle} />
-            </IonTabButton>
-            <IonTabButton tab="tab2" href="/tab2">
-              <IonIcon aria-hidden="true" icon={ellipse} />
-            </IonTabButton>
-            <IonTabButton tab="tab3" href="/tab3">
-              <IonIcon aria-hidden="true" icon={square} />
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
+        <IonRouterOutlet>
+          <Redirect exact from="/" to="/app" />
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/login" component={Login} />
+          <PrivateRoute path="/app" component={TabBar} />
+        </IonRouterOutlet>
       </IonReactRouter>
-    </div>
-  </IonApp>
-);
+    </IonApp>
+  );
+};
 
 export default AppWithQueryClient;

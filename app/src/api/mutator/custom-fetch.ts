@@ -26,7 +26,7 @@ export const customFetch = async <T>({
 
   const response = await fetch(fullUrl, {
     method,
-    ...(data ? { body: JSON.stringify(data) } : {}),
+    body: data ? JSON.stringify(data) : undefined,
     headers: {
       'Content-Type': 'application/json',
       ...rest.headers,
@@ -34,7 +34,15 @@ export const customFetch = async <T>({
     signal: rest.signal,
   });
 
-  return response.json();
+  const json = await response.json();
+
+  if (!response.ok) {
+    console.log({ error: json });
+    const message = json.message || 'An error occurred';
+    throw new Error(json.message);
+  }
+
+  return json;
 };
 
 export default customFetch;

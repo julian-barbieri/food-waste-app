@@ -18,7 +18,9 @@
     "@capacitor/core": "6.0.0",
     "@capacitor/haptics": "6.0.0",
     "@capacitor/keyboard": "6.0.0",
+    "@capacitor/preferences": "^6.0.0",
     "@capacitor/status-bar": "6.0.0",
+    "@hookform/resolvers": "^3.4.2",
     "@ionic/react": "^8.0.0",
     "@ionic/react-router": "^8.0.0",
     "@tanstack/react-query": "^5.37.1",
@@ -30,8 +32,12 @@
     "prettier-plugin-tailwindcss": "^0.5.14",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.5",
     "react-router": "^5.3.4",
-    "react-router-dom": "^5.3.4"
+    "react-router-dom": "^5.3.4",
+    "vite-tsconfig-paths": "^4.3.2",
+    "zod": "^3.23.8",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@capacitor/cli": "6.0.0",
