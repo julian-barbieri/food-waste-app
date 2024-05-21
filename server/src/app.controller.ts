@@ -1,6 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
+import { ApiOkResponse } from '@nestjs/swagger';
 
 import { AppService } from './app.service';
+import { PaginationQuery } from './paginationQueryTest.query';
 
 @Controller()
 export class AppController {
@@ -9,5 +11,12 @@ export class AppController {
   @Get()
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  @Get('paginationQueryTest')
+  @ApiOkResponse({ type: PaginationQuery })
+  findAll(@Query() paginationQuery: PaginationQuery) {
+    console.log({ paginationQuery });
+    return new PaginationQuery(paginationQuery);
   }
 }
