@@ -1,10 +1,4 @@
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-} from '@ionic/react';
+import { IonPage } from '@ionic/react';
 
 import { useAppControllerFindAll } from '@/api';
 

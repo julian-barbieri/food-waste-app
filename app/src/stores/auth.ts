@@ -1,14 +1,9 @@
 import { Preferences } from '@capacitor/preferences';
 import { Location } from 'history';
 import { create } from 'zustand';
-import {
-  StateStorage,
-  createJSONStorage,
-  devtools,
-  persist,
-} from 'zustand/middleware';
+import { devtools } from 'zustand/middleware';
 
-import { UserEntity } from '@/api';
+import { UserEntity, authControllerMe } from '@/api';
 
 type AuthStore = {
   isLoadingToken: boolean;
@@ -52,8 +47,14 @@ export const useAuthStore = create<AuthStore>()(
         setUser: (user) => set({ user }),
         loadToken: async () => {
           const result = await Preferences.get({ key: TOKEN_KEY });
-          console.log({ result });
+
           if (result.value) {
+            // try {
+            //   const user = await authControllerMe();
+            //   set({ user });
+            // } catch (error) {
+            //   console.log('error', error);
+            // }
             set({ token: result.value, isLoadingToken: false });
           }
           set({ isLoadingToken: false });
@@ -61,7 +62,6 @@ export const useAuthStore = create<AuthStore>()(
         },
       },
     }),
-
     {
       name: 'auth-store',
       enabled: import.meta.env.MODE === 'development',

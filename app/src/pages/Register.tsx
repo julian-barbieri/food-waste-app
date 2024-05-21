@@ -10,7 +10,7 @@ import {
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { ZodType, z } from 'zod';
 
 import { useUserControllerCreate } from '@/api';
@@ -34,6 +34,7 @@ const schema = z
 type FormFields = z.infer<typeof schema>;
 
 const Register: React.FC = () => {
+  const history = useHistory();
   const userCreateMutation = useUserControllerCreate({
     mutation: {
       onError: (error) => {
@@ -41,6 +42,7 @@ const Register: React.FC = () => {
       },
       onSuccess: (data) => {
         console.log({ data });
+        history.push('/login');
       },
     },
   });
