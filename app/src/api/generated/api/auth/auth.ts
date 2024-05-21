@@ -5,15 +5,22 @@
  * The Food Waste App API description
  * OpenAPI spec version: 1.0.0
  */
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import type {
   MutationFunction,
+  QueryClient,
+  QueryFunction,
+  QueryKey,
   UseMutationOptions,
   UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult,
 } from '@tanstack/react-query';
 
 import { customFetch } from '../../../mutator/custom-fetch';
-import type { AuthEntity, LoginDto } from '../../model';
+import type { AuthEntity, LoginDto, UserEntity } from '../../model';
 
 export const authControllerLogin = (loginDto: LoginDto) => {
   return customFetch<AuthEntity>({
@@ -79,4 +86,136 @@ export const useAuthControllerLogin = <
   const mutationOptions = getAuthControllerLoginMutationOptions(options);
 
   return useMutation(mutationOptions);
+};
+export const authControllerMe = (signal?: AbortSignal) => {
+  return customFetch<UserEntity>({ url: `/auth/me`, method: 'GET', signal });
+};
+
+export const getAuthControllerMeQueryKey = () => {
+  return [`/auth/me`] as const;
+};
+
+export const getAuthControllerMeQueryOptions = <
+  TData = Awaited<ReturnType<typeof authControllerMe>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof authControllerMe>>, TError, TData>
+  >;
+}) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getAuthControllerMeQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof authControllerMe>>
+  > = ({ signal }) => authControllerMe(signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof authControllerMe>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type AuthControllerMeQueryResult = NonNullable<
+  Awaited<ReturnType<typeof authControllerMe>>
+>;
+export type AuthControllerMeQueryError = unknown;
+
+export const useAuthControllerMe = <
+  TData = Awaited<ReturnType<typeof authControllerMe>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof authControllerMe>>, TError, TData>
+  >;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getAuthControllerMeQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const prefetchAuthControllerMe = async <
+  TData = Awaited<ReturnType<typeof authControllerMe>>,
+  TError = unknown,
+>(
+  queryClient: QueryClient,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof authControllerMe>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): Promise<QueryClient> => {
+  const queryOptions = getAuthControllerMeQueryOptions(options);
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+};
+
+export const getAuthControllerMeSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof authControllerMe>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof authControllerMe>>,
+      TError,
+      TData
+    >
+  >;
+}) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getAuthControllerMeQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof authControllerMe>>
+  > = ({ signal }) => authControllerMe(signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof authControllerMe>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type AuthControllerMeSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof authControllerMe>>
+>;
+export type AuthControllerMeSuspenseQueryError = unknown;
+
+export const useAuthControllerMeSuspense = <
+  TData = Awaited<ReturnType<typeof authControllerMe>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof authControllerMe>>,
+      TError,
+      TData
+    >
+  >;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getAuthControllerMeSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
 };

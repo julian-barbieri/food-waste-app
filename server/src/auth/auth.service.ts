@@ -6,8 +6,9 @@ import {
 import { JwtService } from '@nestjs/jwt';
 
 import { PrismaService } from 'nestjs-prisma';
+import { HashService } from 'src/hash/hash.service';
+import { UserEntity } from 'src/user/entities/user.entity';
 
-import { HashService } from './../hash/hash.service';
 import { AuthEntity } from './entity/auth.entity';
 
 @Injectable()
@@ -41,6 +42,7 @@ export class AuthService {
     // Step 3: Generate a JWT containing the user's ID and return it
     return {
       accessToken: this.jwtService.sign({ userId: user.id }),
+      user: new UserEntity(user),
     };
   }
 }

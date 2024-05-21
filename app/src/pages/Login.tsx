@@ -14,7 +14,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { z } from 'zod';
 
 import { useAuthControllerLogin } from '@/api';
-import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
+import { useAuthStoreActions } from '@/stores/auth';
 
 const schema = z.object({
   email: z.string().email(),
@@ -27,11 +27,7 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 const Login: React.FC = () => {
-  const { login, setLocationBeforeRedirect } = useAuthStoreActions();
-  const locationBeforeRedirect = useAuthStore(
-    (state) => state.locationBeforeRedirect,
-  );
-
+  const { login, setUser } = useAuthStoreActions();
   const history = useHistory();
 
   const loginMutation = useAuthControllerLogin({
@@ -39,10 +35,10 @@ const Login: React.FC = () => {
       onError: (error) => {
         console.log({ error });
       },
-      onSuccess: (data) => {
-        login(data.accessToken);
-        history.push(locationBeforeRedirect || '/');
-        setLocationBeforeRedirect(undefined);
+      onSuccess: async (data) => {
+        const locationToRedirect = await login(data.accessToken);
+        setUser(data.user);
+        history.push(locationToRedirect ?? '/');
       },
     },
   });

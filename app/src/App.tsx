@@ -23,6 +23,7 @@ import { Redirect, Route } from 'react-router-dom';
 
 import { PrivateRoute } from '@/components/PrivateRoute';
 import { TabBar } from '@/components/TabBar';
+import { useLoadUser } from '@/hooks/useLoadUser';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 
@@ -52,6 +53,12 @@ const AppWithQueryClient: React.FC = () => (
 );
 
 const App: React.FC = () => {
+  const { isLoadingUser } = useLoadUser();
+
+  if (isLoadingUser) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <IonApp>
       <IonReactRouter>

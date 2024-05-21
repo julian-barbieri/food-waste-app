@@ -36,7 +36,16 @@ export const TabBar: React.FC = ({}) => {
           <IonTabButton tab="tab3" href="/app/tab3">
             <IonIcon aria-hidden="true" icon={square} />
           </IonTabButton>
-          <IonTabButton onClick={() => logout()}>Logout</IonTabButton>
+          <IonTabButton>
+            <button
+              onClick={async () => {
+                console.log('logout');
+                await logout();
+              }}
+            >
+              Logout
+            </button>
+          </IonTabButton>
         </IonTabBar>
       </IonTabs>
     </div>

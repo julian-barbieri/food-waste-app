@@ -16,7 +16,6 @@ export class AppController {
   @Get('paginationQueryTest')
   @ApiOkResponse({ type: PaginationQuery })
   findAll(@Query() paginationQuery: PaginationQuery) {
-    console.log({ paginationQuery });
     return new PaginationQuery(paginationQuery);
   }
 }
