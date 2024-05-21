@@ -74,17 +74,15 @@ const Login: React.FC = () => {
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <IonItem className="mt-4 w-full">
-              <IonLabel position="stacked">Email</IonLabel>
+              <IonLabel className="text-dark font-semibold" position="stacked">Email</IonLabel>
               <IonInput
-                placeholder="alicia.freis@mail.com"
                 type="email"
                 {...register('email')}
               ></IonInput>
             </IonItem>
             <IonItem className="mt-4 w-full">
-              <IonLabel position="stacked">Contraseña</IonLabel>
+              <IonLabel className="text-dark font-semibold" position="stacked">Contraseña</IonLabel>
               <IonInput
-                placeholder="asdkf33@#kjns"
                 type="password"
                 {...register('password')}
               ></IonInput>
