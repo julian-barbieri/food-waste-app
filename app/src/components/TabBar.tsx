@@ -4,6 +4,7 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
+  IonImg
 } from '@ionic/react';
 
 import { ellipse, square, triangle } from 'ionicons/icons';
@@ -28,13 +29,28 @@ export const TabBar: React.FC = ({}) => {
 
         <IonTabBar slot="bottom" color={'primary'}>
           <IonTabButton tab="tab1" href="/app/tab1">
-            <IonIcon aria-hidden="true" icon={triangle} />
+          <IonImg
+            aria-hidden="true"
+            src="/assets/medialunaIcon.png"
+            alt="Medialuna Logo"
+            className="h-10"
+          />
           </IonTabButton>
           <IonTabButton tab="tab2" href="/app/tab2">
-            <IonIcon aria-hidden="true" icon={ellipse} />
+            <IonImg
+              aria-hidden="true"
+              src="/assets/ordersIcon.png"
+              alt="Medialuna Logo"
+              className="h-10"
+            />
           </IonTabButton>
           <IonTabButton tab="tab3" href="/app/tab3">
-            <IonIcon aria-hidden="true" icon={square} />
+            <IonImg
+              aria-hidden="true"
+              src="/assets/profileIcon.png"
+              alt="Perfil Logo"
+              className="h-10"
+            />
           </IonTabButton>
           <IonTabButton>
             <button
@@ -43,7 +59,11 @@ export const TabBar: React.FC = ({}) => {
                 await logout();
               }}
             >
-              Logout
+            <IonImg
+              src="/assets/logoutIcon.png"
+              alt="Log out Logo"
+              className="h-10"
+            />
             </button>
           </IonTabButton>
         </IonTabBar>
