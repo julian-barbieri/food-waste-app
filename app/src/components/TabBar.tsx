@@ -28,31 +28,41 @@ export const TabBar: React.FC = ({}) => {
         </IonRouterOutlet>
 
         <IonTabBar slot="bottom" color={'primary'}>
-          <IonTabButton tab="tab1" href="/app/tab1">
-          <IonImg
-            aria-hidden="true"
-            src="/assets/medialunaIcon.png"
-            alt="Medialuna Logo"
-            className="h-10"
-          />
+          <IonTabButton 
+            tab="tab1" 
+            className='hover:ring-4 hover:ring-transparent hover:bg-white hover:bg-opacity-30 hover:rounded-full transition-all duration-300' 
+            href="/app/tab1">
+            <IonImg
+              aria-hidden="true"
+              src="/assets/medialunaIcon.png"
+              alt="Medialuna Logo"
+              className="h-7"
+            />
           </IonTabButton>
-          <IonTabButton tab="tab2" href="/app/tab2">
+          <IonTabButton
+            className='hover:ring-4 hover:ring-transparent hover:bg-white hover:bg-opacity-30 hover:rounded-full transition-all duration-300'  
+            tab="tab2" 
+            href="/app/tab2">
             <IonImg
               aria-hidden="true"
               src="/assets/ordersIcon.png"
               alt="Medialuna Logo"
-              className="h-10"
+              className="h-7"
             />
           </IonTabButton>
-          <IonTabButton tab="tab3" href="/app/tab3">
+          <IonTabButton
+            className='hover:ring-4 hover:ring-transparent hover:bg-white hover:bg-opacity-30 hover:rounded-full transition-all duration-300'  
+            tab="tab3" 
+            href="/app/tab3">
             <IonImg
               aria-hidden="true"
               src="/assets/profileIcon.png"
               alt="Perfil Logo"
-              className="h-10"
+              className="h-7"
             />
           </IonTabButton>
-          <IonTabButton>
+          <IonTabButton 
+            className='hover:ring-4 hover:ring-transparent hover:bg-white hover:bg-opacity-30 hover:rounded-full transition-all duration-300' >
             <button
               onClick={async () => {
                 console.log('logout');
@@ -62,7 +72,7 @@ export const TabBar: React.FC = ({}) => {
             <IonImg
               src="/assets/logoutIcon.png"
               alt="Log out Logo"
-              className="h-10"
+              className="h-7"
             />
             </button>
           </IonTabButton>
