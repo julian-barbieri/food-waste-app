@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .sidebar .ion-page {
+    padding-left: 70px;
+  }
+
+  .sidebar ion-tab-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    height: 100%;
+    width: 70px;
+
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+
+  .sidebar ion-tab-button {
+    max-height: 70px;
+    width: 100%;
+  }
+}

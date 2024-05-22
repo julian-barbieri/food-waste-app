@@ -1,41 +1,89 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { UserService } from './user.service';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+
 import { User } from '@prisma/client';
+import { UserReq } from 'src/auth/UserReq.decorator';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserEntity } from './entities/user.entity';
+import { UserService } from './user.service';
 
 @Controller('users')
+@ApiTags('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('signUp')
-  async signupUser(
-    @Body()
-    userData: {
-      firstName: string;
-      lastName: string;
-      email: string;
-      password: string;
-    },
-  ): Promise<User> {
-    const user = await this.userService.findUnique({
-      email: userData.email,
-    });
-
-    if (user) {
-      throw new Error('User already exists');
-    }
-
-    const userToCreate = {
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      email: userData.email,
-      hashedPassword: await this.userService.hashPassword(userData.password),
-    };
-
-    return this.userService.create(userToCreate);
+  @Post()
+  @ApiCreatedResponse({
+    type: UserEntity,
+    description: 'Create a new user',
+  })
+  async create(@Body() createUserDto: CreateUserDto) {
+    return this.userService.create(createUserDto);
   }
 
-  @Get('all')
-  async getUsers() {
-    return this.userService.findMany({});
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    type: UserEntity,
+    isArray: true,
+    description: 'List all users',
+  })
+  async findAll(): Promise<UserEntity[]> {
+    const users = await this.userService.findAll();
+    return users.map((user) => new UserEntity(user));
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    type: UserEntity,
+    description: 'Get user by id',
+  })
+  @ApiNotFoundResponse({
+    description: 'User not found',
+  })
+  async findOne(@Param('id') id: string): Promise<UserEntity> {
+    const user = await this.userService.findOne(id);
+
+    if (!user) {
+      throw new NotFoundException(`User with id = ${id} not found`);
+    }
+
+    return new UserEntity(user);
+  }
+
+  @Patch()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    type: UserEntity,
+    description: 'Update user',
+  })
+  async update(
+    @UserReq() userReq: User,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<UserEntity> {
+    const user = await this.userService.update(userReq.id, updateUserDto);
+    return new UserEntity(user);
   }
 }

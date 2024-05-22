@@ -1,59 +1,67 @@
 import { Injectable } from '@nestjs/common';
-import { User, Prisma } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
-import * as bcrypt from 'bcrypt';
+
+import { Prisma } from '@prisma/client';
+import { PrismaService } from 'nestjs-prisma';
+import { HashService } from 'src/hash/hash.service';
+
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+
 @Injectable()
 export class UserService {
-  async hashPassword(password: string) {
-    return bcrypt.hash(password, 10);
-  }
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private hashService: HashService,
+  ) {}
 
-  async findUnique(
-    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-  ): Promise<User | null> {
-    return this.prisma.user.findUnique({
-      where: userWhereUniqueInput,
-    });
-  }
+  async create(createUserDto: CreateUserDto) {
+    const hashedPassword = await this.hashService.hashPassword(
+      createUserDto.password,
+    );
 
-  async findMany(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.UserWhereUniqueInput;
-    where?: Prisma.UserWhereInput;
-    orderBy?: Prisma.UserOrderByWithRelationInput;
-  }): Promise<User[]> {
-    const { skip, take, cursor, where, orderBy } = params;
-    return this.prisma.user.findMany({
-      skip,
-      take,
-      cursor,
-      where,
-      orderBy,
-    });
-  }
-
-  async create(data: Prisma.UserCreateInput): Promise<User> {
     return this.prisma.user.create({
-      data,
+      data: {
+        email: createUserDto.email,
+        firstName: createUserDto.firstName,
+        lastName: createUserDto.lastName,
+        hashedPassword: hashedPassword,
+      },
     });
   }
 
-  async update(params: {
-    where: Prisma.UserWhereUniqueInput;
-    data: Prisma.UserUpdateInput;
-  }): Promise<User> {
-    const { where, data } = params;
+  findAll() {
+    return this.prisma.user.findMany();
+  }
+
+  findOne(id: string) {
+    return this.prisma.user.findUnique({
+      where: {
+        id: id,
+      },
+    });
+  }
+
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user: Prisma.UserUpdateInput = {
+      email: updateUserDto.email,
+      firstName: updateUserDto.firstName,
+      lastName: updateUserDto.lastName,
+    };
+
+    if (updateUserDto.password) {
+      user.hashedPassword = await this.hashService.hashPassword(
+        updateUserDto.password,
+      );
+    }
+
+    // remove undefined values
+    Object.keys(user).forEach(
+      (key) => user[key] === undefined && delete user[key],
+    );
+
     return this.prisma.user.update({
-      data,
-      where,
-    });
-  }
-
-  async delete(where: Prisma.UserWhereUniqueInput): Promise<User> {
-    return this.prisma.user.delete({
-      where,
+      where: { id },
+      data: user,
     });
   }
 }
