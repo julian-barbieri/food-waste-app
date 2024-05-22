@@ -1,5 +1,6 @@
 import {
   IonIcon,
+  IonImg,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
@@ -27,23 +28,54 @@ export const TabBar: React.FC = ({}) => {
         </IonRouterOutlet>
 
         <IonTabBar slot="bottom" color={'primary'}>
-          <IonTabButton tab="tab1" href="/app/tab1">
-            <IonIcon aria-hidden="true" icon={triangle} />
+          <IonTabButton
+            tab="tab1"
+            className="transition-all duration-300 hover:rounded-full hover:bg-white hover:bg-opacity-30 hover:ring-4 hover:ring-transparent"
+            href="/app/tab1"
+          >
+            <IonImg
+              aria-hidden="true"
+              src="/assets/medialunaIcon.png"
+              alt="Medialuna Logo"
+              className="h-7"
+            />
           </IonTabButton>
-          <IonTabButton tab="tab2" href="/app/tab2">
-            <IonIcon aria-hidden="true" icon={ellipse} />
+          <IonTabButton
+            className="transition-all duration-300 hover:rounded-full hover:bg-white hover:bg-opacity-30 hover:ring-4 hover:ring-transparent"
+            tab="tab2"
+            href="/app/tab2"
+          >
+            <IonImg
+              aria-hidden="true"
+              src="/assets/ordersIcon.png"
+              alt="Medialuna Logo"
+              className="h-7"
+            />
           </IonTabButton>
-          <IonTabButton tab="tab3" href="/app/tab3">
-            <IonIcon aria-hidden="true" icon={square} />
+          <IonTabButton
+            className="transition-all duration-300 hover:rounded-full hover:bg-white hover:bg-opacity-30 hover:ring-4 hover:ring-transparent"
+            tab="tab3"
+            href="/app/tab3"
+          >
+            <IonImg
+              aria-hidden="true"
+              src="/assets/profileIcon.png"
+              alt="Perfil Logo"
+              className="h-7"
+            />
           </IonTabButton>
-          <IonTabButton>
+          <IonTabButton className="transition-all duration-300 hover:rounded-full hover:bg-white hover:bg-opacity-30 hover:ring-4 hover:ring-transparent">
             <button
               onClick={async () => {
                 console.log('logout');
                 await logout();
               }}
             >
-              Logout
+              <IonImg
+                src="/assets/logoutIcon.png"
+                alt="Log out Logo"
+                className="h-7"
+              />
             </button>
           </IonTabButton>
         </IonTabBar>

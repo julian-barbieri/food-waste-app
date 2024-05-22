@@ -69,27 +69,17 @@ const Login: React.FC = () => {
             />
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <IonItem
-              className="ion-no-border mt-4 w-full"
-              style={{
-                '--inner-border-width': '0 0 4px 0',
-              }}
-            >
-              <IonLabel position="stacked">Email</IonLabel>
-              <IonInput
-                placeholder="alicia.freis@mail.com"
-                type="email"
-                class="ion-no-border"
-                {...register('email')}
-              ></IonInput>
+            <IonItem className="mt-4 w-full">
+              <IonLabel className="text-dark font-semibold" position="stacked">
+                Email
+              </IonLabel>
+              <IonInput type="email" {...register('email')}></IonInput>
             </IonItem>
             <IonItem className="mt-4 w-full">
-              <IonLabel position="stacked">Contraseña</IonLabel>
-              <IonInput
-                placeholder="asdkf33@#kjns"
-                type="password"
-                {...register('password')}
-              ></IonInput>
+              <IonLabel className="text-dark font-semibold" position="stacked">
+                Contraseña
+              </IonLabel>
+              <IonInput type="password" {...register('password')}></IonInput>
             </IonItem>
 
             <div className="mt-6 grid place-content-center gap-4">

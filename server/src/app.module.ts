@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { BrandModule } from './brand/brand.module';
 import { EnvConfigModule } from './envConfig/envConfig.module';
 import { UserModule } from './user/user.module';
+import { StoresModule } from './stores/stores.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { UserModule } from './user/user.module';
     UserModule,
     BrandModule,
     AuthModule,
+    StoresModule,
   ],
   controllers: [AppController],
   providers: [AppService],
