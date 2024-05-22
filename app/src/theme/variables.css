@@ -68,4 +68,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-background-color: #fdf7f1;
   --ion-text-color: #5a3e2f;
   --ion-text-color-secondary: #a87c60;
+
+  /* --inner-border-width: 0 0 4px 0; */
+  --border-color: #f79c42;
 }

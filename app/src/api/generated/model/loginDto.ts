@@ -8,5 +8,9 @@
 
 export interface LoginDto {
   email: string;
+  /**
+   * @minLength 6
+   * @maxLength 30
+   */
   password: string;
 }

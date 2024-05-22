@@ -7,17 +7,16 @@
  */
 
 export * from './appControllerFindAllParams';
+export * from './appControllerFreisParams';
+export * from './appControllerTestParams';
 export * from './authEntity';
-export * from './brandControllerFindOnePathParameters';
-export * from './brandControllerRemovePathParameters';
-export * from './brandControllerUpdatePathParameters';
 export * from './brandEntity';
 export * from './createBrandDto';
 export * from './createUserDto';
+export * from './freisEntity';
 export * from './lettersEnum';
 export * from './loginDto';
 export * from './paginationQuery';
 export * from './updateBrandDto';
 export * from './updateUserDto';
-export * from './userControllerFindOnePathParameters';
 export * from './userEntity';

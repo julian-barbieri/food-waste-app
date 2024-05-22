@@ -58,3 +58,27 @@ export class PaginationQuery {
     Object.assign(this, partial);
   }
 }
+
+export class TestEntity {
+  @ApiProperty()
+  @IsString()
+  value: string;
+}
+
+export class FreisEntity {
+  @ApiProperty()
+  @IsString()
+  value: string;
+
+  @ApiProperty()
+  @IsString()
+  id: string;
+
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsString()
+  zeta: string;
+}

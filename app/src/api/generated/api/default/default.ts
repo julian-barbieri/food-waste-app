@@ -17,7 +17,13 @@ import type {
 } from '@tanstack/react-query';
 
 import { customFetch } from '../../../mutator/custom-fetch';
-import type { AppControllerFindAllParams, PaginationQuery } from '../../model';
+import type {
+  AppControllerFindAllParams,
+  AppControllerFreisParams,
+  AppControllerTestParams,
+  FreisEntity,
+  PaginationQuery,
+} from '../../model';
 
 export const appControllerGetHello = (signal?: AbortSignal) => {
   return customFetch<void>({ url: `/`, method: 'GET', signal });
@@ -315,6 +321,375 @@ export const useAppControllerFindAllSuspense = <
   },
 ): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getAppControllerFindAllSuspenseQueryOptions(
+    params,
+    options,
+  );
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const appControllerTest = (
+  params: AppControllerTestParams,
+  signal?: AbortSignal,
+) => {
+  return customFetch<void>({ url: `/test`, method: 'GET', params, signal });
+};
+
+export const getAppControllerTestQueryKey = (
+  params: AppControllerTestParams,
+) => {
+  return [`/test`, ...(params ? [params] : [])] as const;
+};
+
+export const getAppControllerTestQueryOptions = <
+  TData = Awaited<ReturnType<typeof appControllerTest>>,
+  TError = unknown,
+>(
+  params: AppControllerTestParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof appControllerTest>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getAppControllerTestQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof appControllerTest>>
+  > = ({ signal }) => appControllerTest(params, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof appControllerTest>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type AppControllerTestQueryResult = NonNullable<
+  Awaited<ReturnType<typeof appControllerTest>>
+>;
+export type AppControllerTestQueryError = unknown;
+
+export const useAppControllerTest = <
+  TData = Awaited<ReturnType<typeof appControllerTest>>,
+  TError = unknown,
+>(
+  params: AppControllerTestParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof appControllerTest>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getAppControllerTestQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const prefetchAppControllerTest = async <
+  TData = Awaited<ReturnType<typeof appControllerTest>>,
+  TError = unknown,
+>(
+  queryClient: QueryClient,
+  params: AppControllerTestParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof appControllerTest>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): Promise<QueryClient> => {
+  const queryOptions = getAppControllerTestQueryOptions(params, options);
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+};
+
+export const getAppControllerTestSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof appControllerTest>>,
+  TError = unknown,
+>(
+  params: AppControllerTestParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof appControllerTest>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getAppControllerTestQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof appControllerTest>>
+  > = ({ signal }) => appControllerTest(params, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof appControllerTest>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type AppControllerTestSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof appControllerTest>>
+>;
+export type AppControllerTestSuspenseQueryError = unknown;
+
+export const useAppControllerTestSuspense = <
+  TData = Awaited<ReturnType<typeof appControllerTest>>,
+  TError = unknown,
+>(
+  params: AppControllerTestParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof appControllerTest>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getAppControllerTestSuspenseQueryOptions(
+    params,
+    options,
+  );
+
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const appControllerFreis = (
+  id: string,
+  name: string,
+  params: AppControllerFreisParams,
+  signal?: AbortSignal,
+) => {
+  return customFetch<FreisEntity>({
+    url: `/freis/${id}/${name}`,
+    method: 'GET',
+    params,
+    signal,
+  });
+};
+
+export const getAppControllerFreisQueryKey = (
+  id: string,
+  name: string,
+  params: AppControllerFreisParams,
+) => {
+  return [`/freis/${id}/${name}`, ...(params ? [params] : [])] as const;
+};
+
+export const getAppControllerFreisQueryOptions = <
+  TData = Awaited<ReturnType<typeof appControllerFreis>>,
+  TError = unknown,
+>(
+  id: string,
+  name: string,
+  params: AppControllerFreisParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof appControllerFreis>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getAppControllerFreisQueryKey(id, name, params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof appControllerFreis>>
+  > = ({ signal }) => appControllerFreis(id, name, params, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(id && name),
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof appControllerFreis>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type AppControllerFreisQueryResult = NonNullable<
+  Awaited<ReturnType<typeof appControllerFreis>>
+>;
+export type AppControllerFreisQueryError = unknown;
+
+export const useAppControllerFreis = <
+  TData = Awaited<ReturnType<typeof appControllerFreis>>,
+  TError = unknown,
+>(
+  id: string,
+  name: string,
+  params: AppControllerFreisParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof appControllerFreis>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getAppControllerFreisQueryOptions(
+    id,
+    name,
+    params,
+    options,
+  );
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+export const prefetchAppControllerFreis = async <
+  TData = Awaited<ReturnType<typeof appControllerFreis>>,
+  TError = unknown,
+>(
+  queryClient: QueryClient,
+  id: string,
+  name: string,
+  params: AppControllerFreisParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof appControllerFreis>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): Promise<QueryClient> => {
+  const queryOptions = getAppControllerFreisQueryOptions(
+    id,
+    name,
+    params,
+    options,
+  );
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+};
+
+export const getAppControllerFreisSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof appControllerFreis>>,
+  TError = unknown,
+>(
+  id: string,
+  name: string,
+  params: AppControllerFreisParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof appControllerFreis>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getAppControllerFreisQueryKey(id, name, params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof appControllerFreis>>
+  > = ({ signal }) => appControllerFreis(id, name, params, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(id && name),
+    ...queryOptions,
+  } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof appControllerFreis>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type AppControllerFreisSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof appControllerFreis>>
+>;
+export type AppControllerFreisSuspenseQueryError = unknown;
+
+export const useAppControllerFreisSuspense = <
+  TData = Awaited<ReturnType<typeof appControllerFreis>>,
+  TError = unknown,
+>(
+  id: string,
+  name: string,
+  params: AppControllerFreisParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof appControllerFreis>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getAppControllerFreisSuspenseQueryOptions(
+    id,
+    name,
     params,
     options,
   );

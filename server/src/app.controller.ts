@@ -1,8 +1,12 @@
-import { Controller, Get, Query, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Param, Query, ValidationPipe } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 
 import { AppService } from './app.service';
-import { PaginationQuery } from './paginationQueryTest.query';
+import {
+  FreisEntity,
+  PaginationQuery,
+  TestEntity,
+} from './paginationQueryTest.query';
 
 @Controller()
 export class AppController {
@@ -17,5 +21,25 @@ export class AppController {
   @ApiOkResponse({ type: PaginationQuery })
   findAll(@Query() paginationQuery: PaginationQuery) {
     return new PaginationQuery(paginationQuery);
+  }
+
+  @Get('test')
+  test(@Query() test: TestEntity) {
+    return test;
+  }
+
+  @Get('freis/:id/:name')
+  @ApiOkResponse({ type: FreisEntity })
+  freis(
+    @Param('id') id: string,
+    @Param('name') name: string,
+    @Query('zeta') zeta: string,
+  ) {
+    return {
+      value: 'hola soy freis',
+      id,
+      name,
+      zeta,
+    };
   }
 }

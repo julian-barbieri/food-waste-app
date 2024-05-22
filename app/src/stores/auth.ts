@@ -10,6 +10,7 @@ type AuthStore = {
   token: string | undefined | null;
   locationBeforeRedirect: Location | undefined;
   user: UserEntity | undefined;
+  test: string;
 
   actions: {
     setLocationBeforeRedirect: (location: Location | undefined) => void;
@@ -17,6 +18,7 @@ type AuthStore = {
     logout: () => Promise<void>;
     setUser: (user: UserEntity) => void;
     loadToken: () => Promise<boolean>;
+    setTest: (test: string) => void;
   };
 };
 
@@ -29,8 +31,10 @@ export const useAuthStore = create<AuthStore>()(
       token: undefined,
       locationBeforeRedirect: undefined,
       user: undefined,
+      test: 'test',
 
       actions: {
+        setTest: (test) => set({ test }),
         setLocationBeforeRedirect: (location) =>
           set({ locationBeforeRedirect: location }),
         login: async (token) => {

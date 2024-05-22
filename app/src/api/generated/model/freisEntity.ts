@@ -6,6 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type BrandControllerFindOnePathParameters = {
+export interface FreisEntity {
   id: string;
-};
+  name: string;
+  value: string;
+  zeta: string;
+}

@@ -69,11 +69,17 @@ const Login: React.FC = () => {
             />
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <IonItem className="mt-4 w-full">
+            <IonItem
+              className="ion-no-border mt-4 w-full"
+              style={{
+                '--inner-border-width': '0 0 4px 0',
+              }}
+            >
               <IonLabel position="stacked">Email</IonLabel>
               <IonInput
                 placeholder="alicia.freis@mail.com"
                 type="email"
+                class="ion-no-border"
                 {...register('email')}
               ></IonInput>
             </IonItem>
@@ -93,7 +99,7 @@ const Login: React.FC = () => {
 
               <Link
                 to="/register"
-                className="text-dark text-center font-semibold"
+                className="text-dark text-center font-semibold hover:underline"
               >
                 Registrarse
               </Link>
