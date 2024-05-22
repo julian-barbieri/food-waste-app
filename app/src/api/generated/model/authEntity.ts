@@ -5,7 +5,9 @@
  * The Food Waste App API description
  * OpenAPI spec version: 1.0.0
  */
+import type { UserEntity } from './userEntity';
 
 export interface AuthEntity {
   accessToken: string;
+  user: UserEntity;
 }

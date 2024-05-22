@@ -1,3 +1,5 @@
+import { useAuthStore } from '@/stores/auth';
+
 const baseURL = 'http://localhost:3000'; // use your own URL here or environment variable
 
 export const customFetch = async <T>({
@@ -24,11 +26,15 @@ export const customFetch = async <T>({
   // Append the search parameters to the full URL
   fullUrl.search = searchParams.toString();
 
+  const token = useAuthStore.getState().token;
+  console.log({ token });
+
   const response = await fetch(fullUrl, {
     method,
     body: data ? JSON.stringify(data) : undefined,
     headers: {
       'Content-Type': 'application/json',
+      Authorization: token ? `Bearer ${token}` : '',
       ...rest.headers,
     },
     signal: rest.signal,

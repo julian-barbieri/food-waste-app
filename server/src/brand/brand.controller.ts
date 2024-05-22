@@ -21,7 +21,7 @@ import {
 
 import { User } from '@prisma/client';
 import { UserReq } from 'src/auth/UserReq.decorator';
-import { UseJwtAuthGuards } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 import { BrandGuard } from './brand.guard';
 import { BrandService } from './brand.service';
@@ -35,7 +35,7 @@ export class BrandController {
   constructor(private readonly brandService: BrandService) {}
 
   @Post()
-  @UseJwtAuthGuards()
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiUnauthorizedResponse({
     description: 'Unauthorized',
@@ -82,7 +82,7 @@ export class BrandController {
   @ApiForbiddenResponse({
     description: 'You are not allowed to update this brand',
   })
-  @UseJwtAuthGuards()
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiUnauthorizedResponse({
     description: 'Unauthorized',
@@ -104,7 +104,7 @@ export class BrandController {
   @ApiForbiddenResponse({
     description: 'You are not allowed to delete this brand',
   })
-  @UseJwtAuthGuards()
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiUnauthorizedResponse({
     description: 'Unauthorized',

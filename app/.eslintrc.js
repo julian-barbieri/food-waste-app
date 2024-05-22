@@ -3,7 +3,13 @@ export default {
   env: {
     node: true,
   },
-  extends: ['plugin:react/recommended', 'eslint:recommended'],
+  plugins: ['@typescript-eslint/eslint-plugin'],
+  extends: [
+    'plugin:react/recommended',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+  ],
   parserOptions: {
     ecmaVersion: 2020,
   },

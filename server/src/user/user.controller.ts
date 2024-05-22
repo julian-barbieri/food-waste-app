@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -17,7 +18,7 @@ import {
 
 import { User } from '@prisma/client';
 import { UserReq } from 'src/auth/UserReq.decorator';
-import { UseJwtAuthGuards } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -39,7 +40,7 @@ export class UserController {
   }
 
   @Get()
-  @UseJwtAuthGuards()
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     type: UserEntity,
@@ -52,7 +53,7 @@ export class UserController {
   }
 
   @Get(':id')
-  @UseJwtAuthGuards()
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     type: UserEntity,
@@ -72,7 +73,7 @@ export class UserController {
   }
 
   @Patch()
-  @UseJwtAuthGuards()
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({
     type: UserEntity,
