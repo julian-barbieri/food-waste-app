@@ -33,6 +33,7 @@ const Login: React.FC = () => {
   const loginMutation = useAuthControllerLogin({
     mutation: {
       onError: (error) => {
+        alert('Error: ' + error);
         console.log({ error });
       },
       onSuccess: async (data) => {

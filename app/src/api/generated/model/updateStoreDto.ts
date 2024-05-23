@@ -6,11 +6,8 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export interface BrandEntity {
-  backgroundPhotoUrl: string;
-  description: string;
-  id: string;
-  logoUrl: string;
-  name: string;
-  userId: string;
+export interface UpdateStoreDto {
+  address?: string;
+  brandId?: string;
+  isActive?: boolean;
 }

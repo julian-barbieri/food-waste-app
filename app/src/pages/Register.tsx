@@ -74,8 +74,12 @@ const Register: React.FC = () => {
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <IonItem className="w-full" >
-                <IonLabel className="text-dark font-semibold" position="stacked" class="">
+              <IonItem className="w-full">
+                <IonLabel
+                  className="text-dark font-semibold"
+                  position="stacked"
+                  class=""
+                >
                   Nombre
                 </IonLabel>
                 <IonInput
@@ -84,7 +88,12 @@ const Register: React.FC = () => {
                 ></IonInput>
               </IonItem>
               <IonItem className="w-full">
-                <IonLabel className="text-dark font-semibold" position="stacked">Apellido</IonLabel>
+                <IonLabel
+                  className="text-dark font-semibold"
+                  position="stacked"
+                >
+                  Apellido
+                </IonLabel>
                 <IonInput
                   placeholder="Freis"
                   {...register('lastName')}
@@ -93,7 +102,9 @@ const Register: React.FC = () => {
             </div>
 
             <IonItem className="mt-4 w-full">
-              <IonLabel className="text-dark font-semibold" position="stacked">Email</IonLabel>
+              <IonLabel className="text-dark font-semibold" position="stacked">
+                Email
+              </IonLabel>
               <IonInput
                 placeholder="usuario@dominio.com"
                 type="email"
@@ -101,7 +112,9 @@ const Register: React.FC = () => {
               ></IonInput>
             </IonItem>
             <IonItem className="mt-4 w-full">
-              <IonLabel className="text-dark font-semibold" position="stacked">Contraseña</IonLabel>
+              <IonLabel className="text-dark font-semibold" position="stacked">
+                Contraseña
+              </IonLabel>
               <IonInput
                 placeholder=""
                 type="password"
@@ -109,7 +122,9 @@ const Register: React.FC = () => {
               ></IonInput>
             </IonItem>
             <IonItem className="mt-4 w-full">
-              <IonLabel className="text-dark font-semibold" position="stacked">Confirmar Contraseña</IonLabel>
+              <IonLabel className="text-dark font-semibold" position="stacked">
+                Confirmar Contraseña
+              </IonLabel>
               <IonInput
                 placeholder=""
                 type="password"
