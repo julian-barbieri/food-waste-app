@@ -11,7 +11,12 @@ export default defineConfig({
       schemas: './generated/model',
       mock: false,
       prettier: true,
+      urlEncodeParameters: true,
+      headers: true,
+
       override: {
+        // requestOptions: true,
+
         query: {
           signal: true,
           usePrefetch: true,

@@ -22,13 +22,21 @@ import type {
 import { customFetch } from '../../../mutator/custom-fetch';
 import type { AuthEntity, LoginDto, UserEntity } from '../../model';
 
-export const authControllerLogin = (loginDto: LoginDto) => {
-  return customFetch<AuthEntity>({
-    url: `/auth/login`,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    data: loginDto,
-  });
+type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
+
+export const authControllerLogin = (
+  loginDto: LoginDto,
+  options?: SecondParameter<typeof customFetch>,
+) => {
+  return customFetch<AuthEntity>(
+    {
+      url: `/auth/login`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: loginDto,
+    },
+    options,
+  );
 };
 
 export const getAuthControllerLoginMutationOptions = <
@@ -41,13 +49,14 @@ export const getAuthControllerLoginMutationOptions = <
     { data: LoginDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof authControllerLogin>>,
   TError,
   { data: LoginDto },
   TContext
 > => {
-  const { mutation: mutationOptions } = options ?? {};
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof authControllerLogin>>,
@@ -55,7 +64,7 @@ export const getAuthControllerLoginMutationOptions = <
   > = (props) => {
     const { data } = props ?? {};
 
-    return authControllerLogin(data);
+    return authControllerLogin(data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -77,6 +86,7 @@ export const useAuthControllerLogin = <
     { data: LoginDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationResult<
   Awaited<ReturnType<typeof authControllerLogin>>,
   TError,
@@ -87,8 +97,14 @@ export const useAuthControllerLogin = <
 
   return useMutation(mutationOptions);
 };
-export const authControllerMe = (signal?: AbortSignal) => {
-  return customFetch<UserEntity>({ url: `/auth/me`, method: 'GET', signal });
+export const authControllerMe = (
+  options?: SecondParameter<typeof customFetch>,
+  signal?: AbortSignal,
+) => {
+  return customFetch<UserEntity>(
+    { url: `/auth/me`, method: 'GET', signal },
+    options,
+  );
 };
 
 export const getAuthControllerMeQueryKey = () => {
@@ -102,14 +118,15 @@ export const getAuthControllerMeQueryOptions = <
   query?: Partial<
     UseQueryOptions<Awaited<ReturnType<typeof authControllerMe>>, TError, TData>
   >;
+  request?: SecondParameter<typeof customFetch>;
 }) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey = queryOptions?.queryKey ?? getAuthControllerMeQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof authControllerMe>>
-  > = ({ signal }) => authControllerMe(signal);
+  > = ({ signal }) => authControllerMe(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof authControllerMe>>,
@@ -130,6 +147,7 @@ export const useAuthControllerMe = <
   query?: Partial<
     UseQueryOptions<Awaited<ReturnType<typeof authControllerMe>>, TError, TData>
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getAuthControllerMeQueryOptions(options);
 
@@ -155,6 +173,7 @@ export const prefetchAuthControllerMe = async <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): Promise<QueryClient> => {
   const queryOptions = getAuthControllerMeQueryOptions(options);
@@ -175,14 +194,15 @@ export const getAuthControllerMeSuspenseQueryOptions = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey = queryOptions?.queryKey ?? getAuthControllerMeQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof authControllerMe>>
-  > = ({ signal }) => authControllerMe(signal);
+  > = ({ signal }) => authControllerMe(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
     Awaited<ReturnType<typeof authControllerMe>>,
@@ -207,6 +227,7 @@ export const useAuthControllerMeSuspense = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getAuthControllerMeSuspenseQueryOptions(options);
 

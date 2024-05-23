@@ -22,13 +22,21 @@ import type {
 import { customFetch } from '../../../mutator/custom-fetch';
 import type { CreateStoreDto, StoreEntity, UpdateStoreDto } from '../../model';
 
-export const storesControllerCreate = (createStoreDto: CreateStoreDto) => {
-  return customFetch<StoreEntity>({
-    url: `/stores`,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    data: createStoreDto,
-  });
+type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
+
+export const storesControllerCreate = (
+  createStoreDto: CreateStoreDto,
+  options?: SecondParameter<typeof customFetch>,
+) => {
+  return customFetch<StoreEntity>(
+    {
+      url: `/stores`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createStoreDto,
+    },
+    options,
+  );
 };
 
 export const getStoresControllerCreateMutationOptions = <
@@ -41,13 +49,14 @@ export const getStoresControllerCreateMutationOptions = <
     { data: CreateStoreDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof storesControllerCreate>>,
   TError,
   { data: CreateStoreDto },
   TContext
 > => {
-  const { mutation: mutationOptions } = options ?? {};
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof storesControllerCreate>>,
@@ -55,7 +64,7 @@ export const getStoresControllerCreateMutationOptions = <
   > = (props) => {
     const { data } = props ?? {};
 
-    return storesControllerCreate(data);
+    return storesControllerCreate(data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -77,6 +86,7 @@ export const useStoresControllerCreate = <
     { data: CreateStoreDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationResult<
   Awaited<ReturnType<typeof storesControllerCreate>>,
   TError,
@@ -87,8 +97,14 @@ export const useStoresControllerCreate = <
 
   return useMutation(mutationOptions);
 };
-export const storesControllerFindAll = (signal?: AbortSignal) => {
-  return customFetch<StoreEntity[]>({ url: `/stores`, method: 'GET', signal });
+export const storesControllerFindAll = (
+  options?: SecondParameter<typeof customFetch>,
+  signal?: AbortSignal,
+) => {
+  return customFetch<StoreEntity[]>(
+    { url: `/stores`, method: 'GET', signal },
+    options,
+  );
 };
 
 export const getStoresControllerFindAllQueryKey = () => {
@@ -106,15 +122,16 @@ export const getStoresControllerFindAllQueryOptions = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getStoresControllerFindAllQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof storesControllerFindAll>>
-  > = ({ signal }) => storesControllerFindAll(signal);
+  > = ({ signal }) => storesControllerFindAll(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof storesControllerFindAll>>,
@@ -139,6 +156,7 @@ export const useStoresControllerFindAll = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getStoresControllerFindAllQueryOptions(options);
 
@@ -164,6 +182,7 @@ export const prefetchStoresControllerFindAll = async <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): Promise<QueryClient> => {
   const queryOptions = getStoresControllerFindAllQueryOptions(options);
@@ -184,15 +203,16 @@ export const getStoresControllerFindAllSuspenseQueryOptions = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getStoresControllerFindAllQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof storesControllerFindAll>>
-  > = ({ signal }) => storesControllerFindAll(signal);
+  > = ({ signal }) => storesControllerFindAll(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
     Awaited<ReturnType<typeof storesControllerFindAll>>,
@@ -217,6 +237,7 @@ export const useStoresControllerFindAllSuspense = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getStoresControllerFindAllSuspenseQueryOptions(options);
 
@@ -230,12 +251,14 @@ export const useStoresControllerFindAllSuspense = <
   return query;
 };
 
-export const storesControllerFindActiveStores = (signal?: AbortSignal) => {
-  return customFetch<StoreEntity[]>({
-    url: `/stores/activeStores`,
-    method: 'GET',
-    signal,
-  });
+export const storesControllerFindActiveStores = (
+  options?: SecondParameter<typeof customFetch>,
+  signal?: AbortSignal,
+) => {
+  return customFetch<StoreEntity[]>(
+    { url: `/stores/activeStores`, method: 'GET', signal },
+    options,
+  );
 };
 
 export const getStoresControllerFindActiveStoresQueryKey = () => {
@@ -253,15 +276,16 @@ export const getStoresControllerFindActiveStoresQueryOptions = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getStoresControllerFindActiveStoresQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof storesControllerFindActiveStores>>
-  > = ({ signal }) => storesControllerFindActiveStores(signal);
+  > = ({ signal }) => storesControllerFindActiveStores(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof storesControllerFindActiveStores>>,
@@ -286,6 +310,7 @@ export const useStoresControllerFindActiveStores = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getStoresControllerFindActiveStoresQueryOptions(options);
 
@@ -311,6 +336,7 @@ export const prefetchStoresControllerFindActiveStores = async <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): Promise<QueryClient> => {
   const queryOptions = getStoresControllerFindActiveStoresQueryOptions(options);
@@ -331,15 +357,16 @@ export const getStoresControllerFindActiveStoresSuspenseQueryOptions = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getStoresControllerFindActiveStoresQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof storesControllerFindActiveStores>>
-  > = ({ signal }) => storesControllerFindActiveStores(signal);
+  > = ({ signal }) => storesControllerFindActiveStores(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
     Awaited<ReturnType<typeof storesControllerFindActiveStores>>,
@@ -364,6 +391,7 @@ export const useStoresControllerFindActiveStoresSuspense = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions =
     getStoresControllerFindActiveStoresSuspenseQueryOptions(options);
@@ -378,12 +406,15 @@ export const useStoresControllerFindActiveStoresSuspense = <
   return query;
 };
 
-export const storesControllerFindOne = (id: string, signal?: AbortSignal) => {
-  return customFetch<StoreEntity>({
-    url: `/stores/${id}`,
-    method: 'GET',
-    signal,
-  });
+export const storesControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customFetch>,
+  signal?: AbortSignal,
+) => {
+  return customFetch<StoreEntity>(
+    { url: `/stores/${encodeURIComponent(String(id))}`, method: 'GET', signal },
+    options,
+  );
 };
 
 export const getStoresControllerFindOneQueryKey = (id: string) => {
@@ -403,16 +434,17 @@ export const getStoresControllerFindOneQueryOptions = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getStoresControllerFindOneQueryKey(id);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof storesControllerFindOne>>
-  > = ({ signal }) => storesControllerFindOne(id, signal);
+  > = ({ signal }) => storesControllerFindOne(id, requestOptions, signal);
 
   return {
     queryKey,
@@ -444,6 +476,7 @@ export const useStoresControllerFindOne = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getStoresControllerFindOneQueryOptions(id, options);
@@ -471,6 +504,7 @@ export const prefetchStoresControllerFindOne = async <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): Promise<QueryClient> => {
   const queryOptions = getStoresControllerFindOneQueryOptions(id, options);
@@ -493,16 +527,17 @@ export const getStoresControllerFindOneSuspenseQueryOptions = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getStoresControllerFindOneQueryKey(id);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof storesControllerFindOne>>
-  > = ({ signal }) => storesControllerFindOne(id, signal);
+  > = ({ signal }) => storesControllerFindOne(id, requestOptions, signal);
 
   return {
     queryKey,
@@ -534,6 +569,7 @@ export const useStoresControllerFindOneSuspense = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getStoresControllerFindOneSuspenseQueryOptions(
@@ -554,13 +590,17 @@ export const useStoresControllerFindOneSuspense = <
 export const storesControllerUpdate = (
   id: string,
   updateStoreDto: UpdateStoreDto,
+  options?: SecondParameter<typeof customFetch>,
 ) => {
-  return customFetch<void>({
-    url: `/stores/${id}`,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    data: updateStoreDto,
-  });
+  return customFetch<void>(
+    {
+      url: `/stores/${encodeURIComponent(String(id))}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateStoreDto,
+    },
+    options,
+  );
 };
 
 export const getStoresControllerUpdateMutationOptions = <
@@ -573,13 +613,14 @@ export const getStoresControllerUpdateMutationOptions = <
     { id: string; data: UpdateStoreDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof storesControllerUpdate>>,
   TError,
   { id: string; data: UpdateStoreDto },
   TContext
 > => {
-  const { mutation: mutationOptions } = options ?? {};
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof storesControllerUpdate>>,
@@ -587,7 +628,7 @@ export const getStoresControllerUpdateMutationOptions = <
   > = (props) => {
     const { id, data } = props ?? {};
 
-    return storesControllerUpdate(id, data);
+    return storesControllerUpdate(id, data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -609,6 +650,7 @@ export const useStoresControllerUpdate = <
     { id: string; data: UpdateStoreDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationResult<
   Awaited<ReturnType<typeof storesControllerUpdate>>,
   TError,
@@ -619,8 +661,14 @@ export const useStoresControllerUpdate = <
 
   return useMutation(mutationOptions);
 };
-export const storesControllerRemove = (id: string) => {
-  return customFetch<void>({ url: `/stores/${id}`, method: 'DELETE' });
+export const storesControllerRemove = (
+  id: string,
+  options?: SecondParameter<typeof customFetch>,
+) => {
+  return customFetch<void>(
+    { url: `/stores/${encodeURIComponent(String(id))}`, method: 'DELETE' },
+    options,
+  );
 };
 
 export const getStoresControllerRemoveMutationOptions = <
@@ -633,13 +681,14 @@ export const getStoresControllerRemoveMutationOptions = <
     { id: string },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof storesControllerRemove>>,
   TError,
   { id: string },
   TContext
 > => {
-  const { mutation: mutationOptions } = options ?? {};
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof storesControllerRemove>>,
@@ -647,7 +696,7 @@ export const getStoresControllerRemoveMutationOptions = <
   > = (props) => {
     const { id } = props ?? {};
 
-    return storesControllerRemove(id);
+    return storesControllerRemove(id, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -669,6 +718,7 @@ export const useStoresControllerRemove = <
     { id: string },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationResult<
   Awaited<ReturnType<typeof storesControllerRemove>>,
   TError,

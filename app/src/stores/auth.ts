@@ -6,7 +6,7 @@ import { devtools } from 'zustand/middleware';
 import { AuthEntity, UserEntity, authControllerMe } from '@/api';
 
 type AuthStore = {
-  isLoadingToken: boolean;
+  isLoading: boolean;
   token: string | undefined | null;
   locationBeforeRedirect: Location | undefined;
   user: UserEntity | undefined;
@@ -15,8 +15,7 @@ type AuthStore = {
     setLocationBeforeRedirect: (location: Location | undefined) => void;
     login: (authEntity: AuthEntity) => Promise<Location | undefined>;
     logout: () => Promise<void>;
-    setUser: (user: UserEntity) => void;
-    loadToken: () => Promise<boolean>;
+    loadUserFromToken: () => Promise<boolean>;
   };
 };
 
@@ -25,7 +24,7 @@ const TOKEN_KEY = 'token';
 export const useAuthStore = create<AuthStore>()(
   devtools(
     (set, get) => ({
-      isLoadingToken: true,
+      isLoading: true,
       token: undefined,
       locationBeforeRedirect: undefined,
       user: undefined,
@@ -50,21 +49,28 @@ export const useAuthStore = create<AuthStore>()(
           await Preferences.remove({ key: TOKEN_KEY });
           set({ token: undefined, user: undefined });
         },
-        setUser: (user) => set({ user }),
-        loadToken: async () => {
-          const result = await Preferences.get({ key: TOKEN_KEY });
-
-          if (result.value) {
-            // try {
-            //   const user = await authControllerMe();
-            //   set({ user });
-            // } catch (error) {
-            //   console.log('error', error);
-            // }
-            set({ token: result.value, isLoadingToken: false });
+        loadUserFromToken: async () => {
+          set({ isLoading: true });
+          try {
+            const result = await Preferences.get({ key: TOKEN_KEY });
+            if (result.value) {
+              const user = await authControllerMe({
+                headers: {
+                  Authorization: `Bearer ${result.value}`,
+                },
+              });
+              set({
+                token: result.value,
+                user,
+                isLoading: false,
+              });
+              return true;
+            }
+          } catch (error) {
+            console.log('error on loading user from token', error);
           }
-          set({ isLoadingToken: false });
-          return !!result.value;
+          set({ isLoading: false });
+          return false;
         },
       },
     }),

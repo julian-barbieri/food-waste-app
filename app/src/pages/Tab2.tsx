@@ -6,21 +6,15 @@ import {
   IonToolbar,
 } from '@ionic/react';
 
+import { useAppControllerFreis } from '@/api';
+
 const Tab2: React.FC = () => {
+  const query = useAppControllerFreis('hola', 'mundo', {
+    zeta: 'zeta',
+  });
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Tab 2</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Tab 2</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-      </IonContent>
+      <IonContent fullscreen>{JSON.stringify(query.data)}</IonContent>
     </IonPage>
   );
 };

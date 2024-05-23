@@ -22,13 +22,21 @@ import type {
 import { customFetch } from '../../../mutator/custom-fetch';
 import type { CreateUserDto, UpdateUserDto, UserEntity } from '../../model';
 
-export const userControllerCreate = (createUserDto: CreateUserDto) => {
-  return customFetch<UserEntity>({
-    url: `/users`,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    data: createUserDto,
-  });
+type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
+
+export const userControllerCreate = (
+  createUserDto: CreateUserDto,
+  options?: SecondParameter<typeof customFetch>,
+) => {
+  return customFetch<UserEntity>(
+    {
+      url: `/users`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createUserDto,
+    },
+    options,
+  );
 };
 
 export const getUserControllerCreateMutationOptions = <
@@ -41,13 +49,14 @@ export const getUserControllerCreateMutationOptions = <
     { data: CreateUserDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof userControllerCreate>>,
   TError,
   { data: CreateUserDto },
   TContext
 > => {
-  const { mutation: mutationOptions } = options ?? {};
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof userControllerCreate>>,
@@ -55,7 +64,7 @@ export const getUserControllerCreateMutationOptions = <
   > = (props) => {
     const { data } = props ?? {};
 
-    return userControllerCreate(data);
+    return userControllerCreate(data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -77,6 +86,7 @@ export const useUserControllerCreate = <
     { data: CreateUserDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationResult<
   Awaited<ReturnType<typeof userControllerCreate>>,
   TError,
@@ -87,8 +97,14 @@ export const useUserControllerCreate = <
 
   return useMutation(mutationOptions);
 };
-export const userControllerFindAll = (signal?: AbortSignal) => {
-  return customFetch<UserEntity[]>({ url: `/users`, method: 'GET', signal });
+export const userControllerFindAll = (
+  options?: SecondParameter<typeof customFetch>,
+  signal?: AbortSignal,
+) => {
+  return customFetch<UserEntity[]>(
+    { url: `/users`, method: 'GET', signal },
+    options,
+  );
 };
 
 export const getUserControllerFindAllQueryKey = () => {
@@ -106,14 +122,15 @@ export const getUserControllerFindAllQueryOptions = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey = queryOptions?.queryKey ?? getUserControllerFindAllQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof userControllerFindAll>>
-  > = ({ signal }) => userControllerFindAll(signal);
+  > = ({ signal }) => userControllerFindAll(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof userControllerFindAll>>,
@@ -138,6 +155,7 @@ export const useUserControllerFindAll = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getUserControllerFindAllQueryOptions(options);
 
@@ -163,6 +181,7 @@ export const prefetchUserControllerFindAll = async <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): Promise<QueryClient> => {
   const queryOptions = getUserControllerFindAllQueryOptions(options);
@@ -183,14 +202,15 @@ export const getUserControllerFindAllSuspenseQueryOptions = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey = queryOptions?.queryKey ?? getUserControllerFindAllQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof userControllerFindAll>>
-  > = ({ signal }) => userControllerFindAll(signal);
+  > = ({ signal }) => userControllerFindAll(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
     Awaited<ReturnType<typeof userControllerFindAll>>,
@@ -215,6 +235,7 @@ export const useUserControllerFindAllSuspense = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getUserControllerFindAllSuspenseQueryOptions(options);
 
@@ -228,13 +249,19 @@ export const useUserControllerFindAllSuspense = <
   return query;
 };
 
-export const userControllerUpdate = (updateUserDto: UpdateUserDto) => {
-  return customFetch<UserEntity>({
-    url: `/users`,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    data: updateUserDto,
-  });
+export const userControllerUpdate = (
+  updateUserDto: UpdateUserDto,
+  options?: SecondParameter<typeof customFetch>,
+) => {
+  return customFetch<UserEntity>(
+    {
+      url: `/users`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateUserDto,
+    },
+    options,
+  );
 };
 
 export const getUserControllerUpdateMutationOptions = <
@@ -247,13 +274,14 @@ export const getUserControllerUpdateMutationOptions = <
     { data: UpdateUserDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof userControllerUpdate>>,
   TError,
   { data: UpdateUserDto },
   TContext
 > => {
-  const { mutation: mutationOptions } = options ?? {};
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof userControllerUpdate>>,
@@ -261,7 +289,7 @@ export const getUserControllerUpdateMutationOptions = <
   > = (props) => {
     const { data } = props ?? {};
 
-    return userControllerUpdate(data);
+    return userControllerUpdate(data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -283,6 +311,7 @@ export const useUserControllerUpdate = <
     { data: UpdateUserDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationResult<
   Awaited<ReturnType<typeof userControllerUpdate>>,
   TError,
@@ -293,12 +322,15 @@ export const useUserControllerUpdate = <
 
   return useMutation(mutationOptions);
 };
-export const userControllerFindOne = (id: string, signal?: AbortSignal) => {
-  return customFetch<UserEntity>({
-    url: `/users/${id}`,
-    method: 'GET',
-    signal,
-  });
+export const userControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customFetch>,
+  signal?: AbortSignal,
+) => {
+  return customFetch<UserEntity>(
+    { url: `/users/${encodeURIComponent(String(id))}`, method: 'GET', signal },
+    options,
+  );
 };
 
 export const getUserControllerFindOneQueryKey = (id: string) => {
@@ -318,16 +350,17 @@ export const getUserControllerFindOneQueryOptions = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getUserControllerFindOneQueryKey(id);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof userControllerFindOne>>
-  > = ({ signal }) => userControllerFindOne(id, signal);
+  > = ({ signal }) => userControllerFindOne(id, requestOptions, signal);
 
   return {
     queryKey,
@@ -359,6 +392,7 @@ export const useUserControllerFindOne = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getUserControllerFindOneQueryOptions(id, options);
@@ -386,6 +420,7 @@ export const prefetchUserControllerFindOne = async <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): Promise<QueryClient> => {
   const queryOptions = getUserControllerFindOneQueryOptions(id, options);
@@ -408,16 +443,17 @@ export const getUserControllerFindOneSuspenseQueryOptions = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getUserControllerFindOneQueryKey(id);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof userControllerFindOne>>
-  > = ({ signal }) => userControllerFindOne(id, signal);
+  > = ({ signal }) => userControllerFindOne(id, requestOptions, signal);
 
   return {
     queryKey,
@@ -449,6 +485,7 @@ export const useUserControllerFindOneSuspense = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getUserControllerFindOneSuspenseQueryOptions(

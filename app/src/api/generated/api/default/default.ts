@@ -25,8 +25,13 @@ import type {
   PaginationQuery,
 } from '../../model';
 
-export const appControllerGetHello = (signal?: AbortSignal) => {
-  return customFetch<void>({ url: `/`, method: 'GET', signal });
+type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
+
+export const appControllerGetHello = (
+  options?: SecondParameter<typeof customFetch>,
+  signal?: AbortSignal,
+) => {
+  return customFetch<void>({ url: `/`, method: 'GET', signal }, options);
 };
 
 export const getAppControllerGetHelloQueryKey = () => {
@@ -44,14 +49,15 @@ export const getAppControllerGetHelloQueryOptions = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey = queryOptions?.queryKey ?? getAppControllerGetHelloQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof appControllerGetHello>>
-  > = ({ signal }) => appControllerGetHello(signal);
+  > = ({ signal }) => appControllerGetHello(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof appControllerGetHello>>,
@@ -76,6 +82,7 @@ export const useAppControllerGetHello = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getAppControllerGetHelloQueryOptions(options);
 
@@ -101,6 +108,7 @@ export const prefetchAppControllerGetHello = async <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): Promise<QueryClient> => {
   const queryOptions = getAppControllerGetHelloQueryOptions(options);
@@ -121,14 +129,15 @@ export const getAppControllerGetHelloSuspenseQueryOptions = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey = queryOptions?.queryKey ?? getAppControllerGetHelloQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof appControllerGetHello>>
-  > = ({ signal }) => appControllerGetHello(signal);
+  > = ({ signal }) => appControllerGetHello(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
     Awaited<ReturnType<typeof appControllerGetHello>>,
@@ -153,6 +162,7 @@ export const useAppControllerGetHelloSuspense = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getAppControllerGetHelloSuspenseQueryOptions(options);
 
@@ -168,14 +178,13 @@ export const useAppControllerGetHelloSuspense = <
 
 export const appControllerFindAll = (
   params: AppControllerFindAllParams,
+  options?: SecondParameter<typeof customFetch>,
   signal?: AbortSignal,
 ) => {
-  return customFetch<PaginationQuery>({
-    url: `/paginationQueryTest`,
-    method: 'GET',
-    params,
-    signal,
-  });
+  return customFetch<PaginationQuery>(
+    { url: `/paginationQueryTest`, method: 'GET', params, signal },
+    options,
+  );
 };
 
 export const getAppControllerFindAllQueryKey = (
@@ -197,16 +206,17 @@ export const getAppControllerFindAllQueryOptions = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getAppControllerFindAllQueryKey(params);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof appControllerFindAll>>
-  > = ({ signal }) => appControllerFindAll(params, signal);
+  > = ({ signal }) => appControllerFindAll(params, requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof appControllerFindAll>>,
@@ -233,6 +243,7 @@ export const useAppControllerFindAll = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getAppControllerFindAllQueryOptions(params, options);
@@ -260,6 +271,7 @@ export const prefetchAppControllerFindAll = async <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): Promise<QueryClient> => {
   const queryOptions = getAppControllerFindAllQueryOptions(params, options);
@@ -282,16 +294,17 @@ export const getAppControllerFindAllSuspenseQueryOptions = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getAppControllerFindAllQueryKey(params);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof appControllerFindAll>>
-  > = ({ signal }) => appControllerFindAll(params, signal);
+  > = ({ signal }) => appControllerFindAll(params, requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
     Awaited<ReturnType<typeof appControllerFindAll>>,
@@ -318,6 +331,7 @@ export const useAppControllerFindAllSuspense = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getAppControllerFindAllSuspenseQueryOptions(
@@ -337,9 +351,13 @@ export const useAppControllerFindAllSuspense = <
 
 export const appControllerTest = (
   params: AppControllerTestParams,
+  options?: SecondParameter<typeof customFetch>,
   signal?: AbortSignal,
 ) => {
-  return customFetch<void>({ url: `/test`, method: 'GET', params, signal });
+  return customFetch<void>(
+    { url: `/test`, method: 'GET', params, signal },
+    options,
+  );
 };
 
 export const getAppControllerTestQueryKey = (
@@ -361,16 +379,17 @@ export const getAppControllerTestQueryOptions = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getAppControllerTestQueryKey(params);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof appControllerTest>>
-  > = ({ signal }) => appControllerTest(params, signal);
+  > = ({ signal }) => appControllerTest(params, requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof appControllerTest>>,
@@ -397,6 +416,7 @@ export const useAppControllerTest = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getAppControllerTestQueryOptions(params, options);
@@ -424,6 +444,7 @@ export const prefetchAppControllerTest = async <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): Promise<QueryClient> => {
   const queryOptions = getAppControllerTestQueryOptions(params, options);
@@ -446,16 +467,17 @@ export const getAppControllerTestSuspenseQueryOptions = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getAppControllerTestQueryKey(params);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof appControllerTest>>
-  > = ({ signal }) => appControllerTest(params, signal);
+  > = ({ signal }) => appControllerTest(params, requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
     Awaited<ReturnType<typeof appControllerTest>>,
@@ -482,6 +504,7 @@ export const useAppControllerTestSuspense = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getAppControllerTestSuspenseQueryOptions(
@@ -503,14 +526,18 @@ export const appControllerFreis = (
   id: string,
   name: string,
   params: AppControllerFreisParams,
+  options?: SecondParameter<typeof customFetch>,
   signal?: AbortSignal,
 ) => {
-  return customFetch<FreisEntity>({
-    url: `/freis/${id}/${name}`,
-    method: 'GET',
-    params,
-    signal,
-  });
+  return customFetch<FreisEntity>(
+    {
+      url: `/freis/${encodeURIComponent(String(id))}/${encodeURIComponent(String(name))}`,
+      method: 'GET',
+      params,
+      signal,
+    },
+    options,
+  );
 };
 
 export const getAppControllerFreisQueryKey = (
@@ -536,16 +563,18 @@ export const getAppControllerFreisQueryOptions = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getAppControllerFreisQueryKey(id, name, params);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof appControllerFreis>>
-  > = ({ signal }) => appControllerFreis(id, name, params, signal);
+  > = ({ signal }) =>
+    appControllerFreis(id, name, params, requestOptions, signal);
 
   return {
     queryKey,
@@ -579,6 +608,7 @@ export const useAppControllerFreis = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getAppControllerFreisQueryOptions(
@@ -613,6 +643,7 @@ export const prefetchAppControllerFreis = async <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): Promise<QueryClient> => {
   const queryOptions = getAppControllerFreisQueryOptions(
@@ -642,16 +673,18 @@ export const getAppControllerFreisSuspenseQueryOptions = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getAppControllerFreisQueryKey(id, name, params);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof appControllerFreis>>
-  > = ({ signal }) => appControllerFreis(id, name, params, signal);
+  > = ({ signal }) =>
+    appControllerFreis(id, name, params, requestOptions, signal);
 
   return {
     queryKey,
@@ -685,6 +718,7 @@ export const useAppControllerFreisSuspense = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getAppControllerFreisSuspenseQueryOptions(

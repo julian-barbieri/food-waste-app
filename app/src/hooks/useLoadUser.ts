@@ -1,29 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import { authControllerMe, useAuthControllerMe } from '@/api';
-import { useAuthStoreActions } from '@/stores/auth';
+import { useAuthStore, useAuthStoreActions } from '@/stores/auth';
 
 export const useLoadUser = () => {
-  const [isLoadingUser, setIsLoadingUser] = useState(true);
-  const { loadToken, setUser, logout } = useAuthStoreActions();
+  const isLoading = useAuthStore((state) => state.isLoading);
+  const { loadUserFromToken } = useAuthStoreActions();
 
   useEffect(() => {
-    const load = async () => {
-      setIsLoadingUser(true);
-      const isThereToken = await loadToken();
-      if (isThereToken) {
-        try {
-          const res = await authControllerMe();
-          setUser(res);
-        } catch (error) {
-          console.log('error', error);
-          await logout();
-        }
-      }
-      setIsLoadingUser(false);
-    };
-    load();
+    loadUserFromToken();
   }, []);
 
-  return { isLoadingUser };
+  return { isLoadingUser: isLoading };
 };

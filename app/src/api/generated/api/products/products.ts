@@ -26,13 +26,21 @@ import type {
   UpdateProductDto,
 } from '../../model';
 
-export const productControllerCreate = (createProductDto: CreateProductDto) => {
-  return customFetch<void>({
-    url: `/products`,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    data: createProductDto,
-  });
+type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
+
+export const productControllerCreate = (
+  createProductDto: CreateProductDto,
+  options?: SecondParameter<typeof customFetch>,
+) => {
+  return customFetch<void>(
+    {
+      url: `/products`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createProductDto,
+    },
+    options,
+  );
 };
 
 export const getProductControllerCreateMutationOptions = <
@@ -45,13 +53,14 @@ export const getProductControllerCreateMutationOptions = <
     { data: CreateProductDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof productControllerCreate>>,
   TError,
   { data: CreateProductDto },
   TContext
 > => {
-  const { mutation: mutationOptions } = options ?? {};
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof productControllerCreate>>,
@@ -59,7 +68,7 @@ export const getProductControllerCreateMutationOptions = <
   > = (props) => {
     const { data } = props ?? {};
 
-    return productControllerCreate(data);
+    return productControllerCreate(data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -81,6 +90,7 @@ export const useProductControllerCreate = <
     { data: CreateProductDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationResult<
   Awaited<ReturnType<typeof productControllerCreate>>,
   TError,
@@ -91,12 +101,14 @@ export const useProductControllerCreate = <
 
   return useMutation(mutationOptions);
 };
-export const productControllerFindAll = (signal?: AbortSignal) => {
-  return customFetch<ProductEntity[]>({
-    url: `/products`,
-    method: 'GET',
-    signal,
-  });
+export const productControllerFindAll = (
+  options?: SecondParameter<typeof customFetch>,
+  signal?: AbortSignal,
+) => {
+  return customFetch<ProductEntity[]>(
+    { url: `/products`, method: 'GET', signal },
+    options,
+  );
 };
 
 export const getProductControllerFindAllQueryKey = () => {
@@ -114,15 +126,16 @@ export const getProductControllerFindAllQueryOptions = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getProductControllerFindAllQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof productControllerFindAll>>
-  > = ({ signal }) => productControllerFindAll(signal);
+  > = ({ signal }) => productControllerFindAll(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof productControllerFindAll>>,
@@ -147,6 +160,7 @@ export const useProductControllerFindAll = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getProductControllerFindAllQueryOptions(options);
 
@@ -172,6 +186,7 @@ export const prefetchProductControllerFindAll = async <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): Promise<QueryClient> => {
   const queryOptions = getProductControllerFindAllQueryOptions(options);
@@ -192,15 +207,16 @@ export const getProductControllerFindAllSuspenseQueryOptions = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getProductControllerFindAllQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof productControllerFindAll>>
-  > = ({ signal }) => productControllerFindAll(signal);
+  > = ({ signal }) => productControllerFindAll(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
     Awaited<ReturnType<typeof productControllerFindAll>>,
@@ -225,6 +241,7 @@ export const useProductControllerFindAllSuspense = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getProductControllerFindAllSuspenseQueryOptions(options);
 
@@ -238,12 +255,19 @@ export const useProductControllerFindAllSuspense = <
   return query;
 };
 
-export const productControllerFindOne = (id: string, signal?: AbortSignal) => {
-  return customFetch<ProductEntity>({
-    url: `/products/${id}`,
-    method: 'GET',
-    signal,
-  });
+export const productControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customFetch>,
+  signal?: AbortSignal,
+) => {
+  return customFetch<ProductEntity>(
+    {
+      url: `/products/${encodeURIComponent(String(id))}`,
+      method: 'GET',
+      signal,
+    },
+    options,
+  );
 };
 
 export const getProductControllerFindOneQueryKey = (id: string) => {
@@ -263,16 +287,17 @@ export const getProductControllerFindOneQueryOptions = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getProductControllerFindOneQueryKey(id);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof productControllerFindOne>>
-  > = ({ signal }) => productControllerFindOne(id, signal);
+  > = ({ signal }) => productControllerFindOne(id, requestOptions, signal);
 
   return {
     queryKey,
@@ -304,6 +329,7 @@ export const useProductControllerFindOne = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getProductControllerFindOneQueryOptions(id, options);
@@ -331,6 +357,7 @@ export const prefetchProductControllerFindOne = async <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): Promise<QueryClient> => {
   const queryOptions = getProductControllerFindOneQueryOptions(id, options);
@@ -353,16 +380,17 @@ export const getProductControllerFindOneSuspenseQueryOptions = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getProductControllerFindOneQueryKey(id);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof productControllerFindOne>>
-  > = ({ signal }) => productControllerFindOne(id, signal);
+  > = ({ signal }) => productControllerFindOne(id, requestOptions, signal);
 
   return {
     queryKey,
@@ -394,6 +422,7 @@ export const useProductControllerFindOneSuspense = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getProductControllerFindOneSuspenseQueryOptions(
@@ -414,13 +443,17 @@ export const useProductControllerFindOneSuspense = <
 export const productControllerUpdate = (
   id: string,
   updateProductDto: UpdateProductDto,
+  options?: SecondParameter<typeof customFetch>,
 ) => {
-  return customFetch<void>({
-    url: `/products/${id}`,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    data: updateProductDto,
-  });
+  return customFetch<void>(
+    {
+      url: `/products/${encodeURIComponent(String(id))}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateProductDto,
+    },
+    options,
+  );
 };
 
 export const getProductControllerUpdateMutationOptions = <
@@ -433,13 +466,14 @@ export const getProductControllerUpdateMutationOptions = <
     { id: string; data: UpdateProductDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof productControllerUpdate>>,
   TError,
   { id: string; data: UpdateProductDto },
   TContext
 > => {
-  const { mutation: mutationOptions } = options ?? {};
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof productControllerUpdate>>,
@@ -447,7 +481,7 @@ export const getProductControllerUpdateMutationOptions = <
   > = (props) => {
     const { id, data } = props ?? {};
 
-    return productControllerUpdate(id, data);
+    return productControllerUpdate(id, data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -469,6 +503,7 @@ export const useProductControllerUpdate = <
     { id: string; data: UpdateProductDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationResult<
   Awaited<ReturnType<typeof productControllerUpdate>>,
   TError,
@@ -479,8 +514,14 @@ export const useProductControllerUpdate = <
 
   return useMutation(mutationOptions);
 };
-export const productControllerRemove = (id: string) => {
-  return customFetch<void>({ url: `/products/${id}`, method: 'DELETE' });
+export const productControllerRemove = (
+  id: string,
+  options?: SecondParameter<typeof customFetch>,
+) => {
+  return customFetch<void>(
+    { url: `/products/${encodeURIComponent(String(id))}`, method: 'DELETE' },
+    options,
+  );
 };
 
 export const getProductControllerRemoveMutationOptions = <
@@ -493,13 +534,14 @@ export const getProductControllerRemoveMutationOptions = <
     { id: string },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof productControllerRemove>>,
   TError,
   { id: string },
   TContext
 > => {
-  const { mutation: mutationOptions } = options ?? {};
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof productControllerRemove>>,
@@ -507,7 +549,7 @@ export const getProductControllerRemoveMutationOptions = <
   > = (props) => {
     const { id } = props ?? {};
 
-    return productControllerRemove(id);
+    return productControllerRemove(id, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -529,6 +571,7 @@ export const useProductControllerRemove = <
     { id: string },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationResult<
   Awaited<ReturnType<typeof productControllerRemove>>,
   TError,

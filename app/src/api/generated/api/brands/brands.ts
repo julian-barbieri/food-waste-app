@@ -22,13 +22,21 @@ import type {
 import { customFetch } from '../../../mutator/custom-fetch';
 import type { BrandEntity, CreateBrandDto, UpdateBrandDto } from '../../model';
 
-export const brandControllerCreate = (createBrandDto: CreateBrandDto) => {
-  return customFetch<BrandEntity>({
-    url: `/brands`,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    data: createBrandDto,
-  });
+type SecondParameter<T extends (...args: any) => any> = Parameters<T>[1];
+
+export const brandControllerCreate = (
+  createBrandDto: CreateBrandDto,
+  options?: SecondParameter<typeof customFetch>,
+) => {
+  return customFetch<BrandEntity>(
+    {
+      url: `/brands`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createBrandDto,
+    },
+    options,
+  );
 };
 
 export const getBrandControllerCreateMutationOptions = <
@@ -41,13 +49,14 @@ export const getBrandControllerCreateMutationOptions = <
     { data: CreateBrandDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof brandControllerCreate>>,
   TError,
   { data: CreateBrandDto },
   TContext
 > => {
-  const { mutation: mutationOptions } = options ?? {};
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof brandControllerCreate>>,
@@ -55,7 +64,7 @@ export const getBrandControllerCreateMutationOptions = <
   > = (props) => {
     const { data } = props ?? {};
 
-    return brandControllerCreate(data);
+    return brandControllerCreate(data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -77,6 +86,7 @@ export const useBrandControllerCreate = <
     { data: CreateBrandDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationResult<
   Awaited<ReturnType<typeof brandControllerCreate>>,
   TError,
@@ -87,8 +97,14 @@ export const useBrandControllerCreate = <
 
   return useMutation(mutationOptions);
 };
-export const brandControllerFindAll = (signal?: AbortSignal) => {
-  return customFetch<BrandEntity[]>({ url: `/brands`, method: 'GET', signal });
+export const brandControllerFindAll = (
+  options?: SecondParameter<typeof customFetch>,
+  signal?: AbortSignal,
+) => {
+  return customFetch<BrandEntity[]>(
+    { url: `/brands`, method: 'GET', signal },
+    options,
+  );
 };
 
 export const getBrandControllerFindAllQueryKey = () => {
@@ -106,15 +122,16 @@ export const getBrandControllerFindAllQueryOptions = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getBrandControllerFindAllQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof brandControllerFindAll>>
-  > = ({ signal }) => brandControllerFindAll(signal);
+  > = ({ signal }) => brandControllerFindAll(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof brandControllerFindAll>>,
@@ -139,6 +156,7 @@ export const useBrandControllerFindAll = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getBrandControllerFindAllQueryOptions(options);
 
@@ -164,6 +182,7 @@ export const prefetchBrandControllerFindAll = async <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): Promise<QueryClient> => {
   const queryOptions = getBrandControllerFindAllQueryOptions(options);
@@ -184,15 +203,16 @@ export const getBrandControllerFindAllSuspenseQueryOptions = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getBrandControllerFindAllQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof brandControllerFindAll>>
-  > = ({ signal }) => brandControllerFindAll(signal);
+  > = ({ signal }) => brandControllerFindAll(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
     Awaited<ReturnType<typeof brandControllerFindAll>>,
@@ -217,6 +237,7 @@ export const useBrandControllerFindAllSuspense = <
       TData
     >
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getBrandControllerFindAllSuspenseQueryOptions(options);
 
@@ -230,12 +251,15 @@ export const useBrandControllerFindAllSuspense = <
   return query;
 };
 
-export const brandControllerFindOne = (id: string, signal?: AbortSignal) => {
-  return customFetch<BrandEntity>({
-    url: `/brands/${id}`,
-    method: 'GET',
-    signal,
-  });
+export const brandControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customFetch>,
+  signal?: AbortSignal,
+) => {
+  return customFetch<BrandEntity>(
+    { url: `/brands/${encodeURIComponent(String(id))}`, method: 'GET', signal },
+    options,
+  );
 };
 
 export const getBrandControllerFindOneQueryKey = (id: string) => {
@@ -255,16 +279,17 @@ export const getBrandControllerFindOneQueryOptions = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getBrandControllerFindOneQueryKey(id);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof brandControllerFindOne>>
-  > = ({ signal }) => brandControllerFindOne(id, signal);
+  > = ({ signal }) => brandControllerFindOne(id, requestOptions, signal);
 
   return {
     queryKey,
@@ -296,6 +321,7 @@ export const useBrandControllerFindOne = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getBrandControllerFindOneQueryOptions(id, options);
@@ -323,6 +349,7 @@ export const prefetchBrandControllerFindOne = async <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): Promise<QueryClient> => {
   const queryOptions = getBrandControllerFindOneQueryOptions(id, options);
@@ -345,16 +372,17 @@ export const getBrandControllerFindOneSuspenseQueryOptions = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getBrandControllerFindOneQueryKey(id);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof brandControllerFindOne>>
-  > = ({ signal }) => brandControllerFindOne(id, signal);
+  > = ({ signal }) => brandControllerFindOne(id, requestOptions, signal);
 
   return {
     queryKey,
@@ -386,6 +414,7 @@ export const useBrandControllerFindOneSuspense = <
         TData
       >
     >;
+    request?: SecondParameter<typeof customFetch>;
   },
 ): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getBrandControllerFindOneSuspenseQueryOptions(
@@ -406,13 +435,17 @@ export const useBrandControllerFindOneSuspense = <
 export const brandControllerUpdate = (
   id: string,
   updateBrandDto: UpdateBrandDto,
+  options?: SecondParameter<typeof customFetch>,
 ) => {
-  return customFetch<BrandEntity>({
-    url: `/brands/${id}`,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    data: updateBrandDto,
-  });
+  return customFetch<BrandEntity>(
+    {
+      url: `/brands/${encodeURIComponent(String(id))}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateBrandDto,
+    },
+    options,
+  );
 };
 
 export const getBrandControllerUpdateMutationOptions = <
@@ -425,13 +458,14 @@ export const getBrandControllerUpdateMutationOptions = <
     { id: string; data: UpdateBrandDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof brandControllerUpdate>>,
   TError,
   { id: string; data: UpdateBrandDto },
   TContext
 > => {
-  const { mutation: mutationOptions } = options ?? {};
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof brandControllerUpdate>>,
@@ -439,7 +473,7 @@ export const getBrandControllerUpdateMutationOptions = <
   > = (props) => {
     const { id, data } = props ?? {};
 
-    return brandControllerUpdate(id, data);
+    return brandControllerUpdate(id, data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -461,6 +495,7 @@ export const useBrandControllerUpdate = <
     { id: string; data: UpdateBrandDto },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationResult<
   Awaited<ReturnType<typeof brandControllerUpdate>>,
   TError,
@@ -471,8 +506,14 @@ export const useBrandControllerUpdate = <
 
   return useMutation(mutationOptions);
 };
-export const brandControllerRemove = (id: string) => {
-  return customFetch<BrandEntity>({ url: `/brands/${id}`, method: 'DELETE' });
+export const brandControllerRemove = (
+  id: string,
+  options?: SecondParameter<typeof customFetch>,
+) => {
+  return customFetch<BrandEntity>(
+    { url: `/brands/${encodeURIComponent(String(id))}`, method: 'DELETE' },
+    options,
+  );
 };
 
 export const getBrandControllerRemoveMutationOptions = <
@@ -485,13 +526,14 @@ export const getBrandControllerRemoveMutationOptions = <
     { id: string },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof brandControllerRemove>>,
   TError,
   { id: string },
   TContext
 > => {
-  const { mutation: mutationOptions } = options ?? {};
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof brandControllerRemove>>,
@@ -499,7 +541,7 @@ export const getBrandControllerRemoveMutationOptions = <
   > = (props) => {
     const { id } = props ?? {};
 
-    return brandControllerRemove(id);
+    return brandControllerRemove(id, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -521,6 +563,7 @@ export const useBrandControllerRemove = <
     { id: string },
     TContext
   >;
+  request?: SecondParameter<typeof customFetch>;
 }): UseMutationResult<
   Awaited<ReturnType<typeof brandControllerRemove>>,
   TError,
