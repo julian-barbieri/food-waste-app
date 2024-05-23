@@ -29,8 +29,16 @@ export class StoresService {
     return this.prisma.store.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} store`;
+  findActiveStores(){
+    return this.prisma.store.findMany({ 
+      where: { isActive: true } 
+    });
+  }
+
+  findOne(id: string) {
+    return this.prisma.store.findUnique({
+      where: { id },
+    });
   }
 
   update(id: number, updateStoreDto: UpdateStoreDto) {

@@ -1,10 +1,32 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import { StoresService } from './stores.service';
-import { CreateStoreDto } from './dto/create-store.dto';
-import { UpdateStoreDto } from './dto/update-store.dto';
-import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { StoreEntity } from './entities/store.entity';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiQuery,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+
+import { CreateStoreDto } from './dto/create-store.dto';
+import { FindAllStoresQuery } from './dto/find-all.query';
+import { UpdateStoreDto } from './dto/update-store.dto';
+import { StoreEntity } from './entities/store.entity';
+import { StoresService } from './stores.service';
 
 @Controller('stores')
 @ApiTags('stores')
@@ -27,7 +49,7 @@ export class StoresController {
     return new StoreEntity(store);
   }
 
-  //
+  //GET ALL
   @Get()
   @ApiOkResponse({
     type: StoreEntity,
@@ -39,9 +61,33 @@ export class StoresController {
     return stores.map((store) => new StoreEntity(store));
   }
 
+  //GET ALL
+  @Get('/activeStores')
+  @ApiOkResponse({
+    type: StoreEntity,
+    isArray: true,
+    description: 'List all ACTIVE stores',
+  })
+  async findActiveStores(): Promise<StoreEntity[]> {
+    const stores = await this.storesService.findActiveStores();
+    return stores.map((store) => new StoreEntity(store));
+  }
+
+  //GET BY ID
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.storesService.findOne(+id);
+  @ApiOkResponse({
+    type: StoreEntity,
+    description: 'Get store by id',
+  })
+  @ApiNotFoundResponse({
+    description: 'Store not found',
+  })
+  async findOne(@Param('id') id: string): Promise<StoreEntity> {
+    const store = await this.storesService.findOne(id);
+    if (!store) {
+      throw new NotFoundException(`Store with id = ${id} not found`);
+    }
+    return new StoreEntity(store);
   }
 
   @Patch(':id')
