@@ -22,14 +22,7 @@ export class BrandEntity implements Brand {
   @ApiProperty()
   backgroundPhotoUrl: string;
 
-  @ApiProperty({ required: false, type: UserEntity })
-  user?: UserEntity;
-
-  constructor({ user, ...data }: Partial<BrandEntity>) {
+  constructor({...data }: Partial<BrandEntity>) {
     Object.assign(this, data);
-
-    if (user) {
-      this.user = new UserEntity(user);
-    }
   }
 }

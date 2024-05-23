@@ -26,18 +26,28 @@ export class StoresService {
   }
 
   findAll() {
-    return this.prisma.store.findMany();
+    return this.prisma.store.findMany({
+      include: {
+        brand: true,
+      }
+    });
   }
 
   findActiveStores(){
     return this.prisma.store.findMany({ 
-      where: { isActive: true } 
+      where: { isActive: true },
+      include: {
+        brand: true,
+      } 
     });
   }
 
   findOne(id: string) {
     return this.prisma.store.findUnique({
       where: { id },
+      include: {
+        brand: true,
+      }
     });
   }
 

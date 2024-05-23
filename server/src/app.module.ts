@@ -10,6 +10,7 @@ import { BrandModule } from './brand/brand.module';
 import { EnvConfigModule } from './envConfig/envConfig.module';
 import { UserModule } from './user/user.module';
 import { StoresModule } from './stores/stores.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { StoresModule } from './stores/stores.module';
     BrandModule,
     AuthModule,
     StoresModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],

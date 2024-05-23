@@ -1,5 +1,6 @@
 import { Store } from "@prisma/client";
 import { ApiProperty } from '@nestjs/swagger';
+import { BrandEntity } from "src/brand/entities/brand.entity";
 
 export class StoreEntity implements Store {
     @ApiProperty()
@@ -19,9 +20,17 @@ export class StoreEntity implements Store {
 
     @ApiProperty()
     isActive: boolean;
+    
+    @ApiProperty()
+    brand: BrandEntity;
 
-    constructor({ ...data }: Partial<StoreEntity>) {
+    constructor({brand, ...data }: Partial<StoreEntity>) {
+        
         Object.assign(this, data);
+        
+        if (brand) {
+            this.brand = new BrandEntity(brand);
+        }
     }
 
 }

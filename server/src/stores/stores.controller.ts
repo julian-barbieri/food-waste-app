@@ -61,7 +61,7 @@ export class StoresController {
     return stores.map((store) => new StoreEntity(store));
   }
 
-  //GET ALL
+  //GET ALL ACTIVES
   @Get('/activeStores')
   @ApiOkResponse({
     type: StoreEntity,
