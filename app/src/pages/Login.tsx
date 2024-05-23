@@ -27,7 +27,7 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 const Login: React.FC = () => {
-  const { login, setUser } = useAuthStoreActions();
+  const { login } = useAuthStoreActions();
   const history = useHistory();
 
   const loginMutation = useAuthControllerLogin({
@@ -37,8 +37,7 @@ const Login: React.FC = () => {
         console.log({ error });
       },
       onSuccess: async (data) => {
-        const locationToRedirect = await login(data.accessToken);
-        setUser(data.user);
+        const locationToRedirect = await login(data);
         history.push(locationToRedirect ?? '/');
       },
     },
@@ -54,7 +53,7 @@ const Login: React.FC = () => {
   });
 
   const onSubmit: SubmitHandler<FormFields> = (data) =>
-    loginMutation.mutateAsync({
+    loginMutation.mutate({
       data,
     });
 

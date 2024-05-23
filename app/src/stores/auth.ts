@@ -3,22 +3,20 @@ import { Location } from 'history';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-import { UserEntity, authControllerMe } from '@/api';
+import { AuthEntity, UserEntity, authControllerMe } from '@/api';
 
 type AuthStore = {
   isLoadingToken: boolean;
   token: string | undefined | null;
   locationBeforeRedirect: Location | undefined;
   user: UserEntity | undefined;
-  test: string;
 
   actions: {
     setLocationBeforeRedirect: (location: Location | undefined) => void;
-    login: (token: string) => Promise<Location | undefined>;
+    login: (authEntity: AuthEntity) => Promise<Location | undefined>;
     logout: () => Promise<void>;
     setUser: (user: UserEntity) => void;
     loadToken: () => Promise<boolean>;
-    setTest: (test: string) => void;
   };
 };
 
@@ -31,22 +29,26 @@ export const useAuthStore = create<AuthStore>()(
       token: undefined,
       locationBeforeRedirect: undefined,
       user: undefined,
-      test: 'test',
 
       actions: {
-        setTest: (test) => set({ test }),
         setLocationBeforeRedirect: (location) =>
           set({ locationBeforeRedirect: location }),
-        login: async (token) => {
-          await Preferences.set({ key: TOKEN_KEY, value: token });
+        login: async (authEntity) => {
+          await Preferences.set({
+            key: TOKEN_KEY,
+            value: authEntity.accessToken,
+          });
           const location = get().locationBeforeRedirect;
-          set({ token, locationBeforeRedirect: undefined });
+          set({
+            token: authEntity.accessToken,
+            user: authEntity.user,
+            locationBeforeRedirect: undefined,
+          });
           return location;
         },
         logout: async () => {
           await Preferences.remove({ key: TOKEN_KEY });
-          console.log('logout');
-          set({ token: undefined });
+          set({ token: undefined, user: undefined });
         },
         setUser: (user) => set({ user }),
         loadToken: async () => {

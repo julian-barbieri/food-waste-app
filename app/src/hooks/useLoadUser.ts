@@ -1,27 +1,23 @@
 import { useEffect, useState } from 'react';
 
-import { useAuthControllerMe } from '@/api';
+import { authControllerMe, useAuthControllerMe } from '@/api';
 import { useAuthStoreActions } from '@/stores/auth';
 
 export const useLoadUser = () => {
   const [isLoadingUser, setIsLoadingUser] = useState(true);
-  const { loadToken, setUser } = useAuthStoreActions();
-
-  const { refetch: getUser } = useAuthControllerMe({
-    query: {
-      retry: false,
-      enabled: false,
-    },
-  });
+  const { loadToken, setUser, logout } = useAuthStoreActions();
 
   useEffect(() => {
     const load = async () => {
       setIsLoadingUser(true);
       const isThereToken = await loadToken();
       if (isThereToken) {
-        const res = await getUser();
-        if (res.data) {
-          setUser(res.data);
+        try {
+          const res = await authControllerMe();
+          setUser(res);
+        } catch (error) {
+          console.log('error', error);
+          await logout();
         }
       }
       setIsLoadingUser(false);

@@ -57,7 +57,7 @@ const Register: React.FC = () => {
   });
 
   const onSubmit: SubmitHandler<FormFields> = (data) =>
-    userCreateMutation.mutateAsync({
+    userCreateMutation.mutate({
       data,
     });
 
@@ -78,7 +78,6 @@ const Register: React.FC = () => {
                 <IonLabel
                   className="text-dark font-semibold"
                   position="stacked"
-                  class=""
                 >
                   Nombre
                 </IonLabel>
