@@ -7,6 +7,21 @@ const prisma = new PrismaClient();
 const numberOfUsers = 100;
 const numberOfTags = 10;
 
+async function main() {
+  const hashedPassword = await hashPassword('password');
+  await createSpecificUsers(hashedPassword);
+  await createRandomUsers(hashedPassword);
+  await createBrands();
+  await createStores();
+  await createTags();
+  await associateTagsWithStores();
+  await createFavoriteStores();
+  await createProducts();
+  await createTransactions();
+  await createReviews();
+  console.log('Seeding completed!');
+}
+
 async function hashPassword(password: string): Promise<string> {
   return await bcrypt.hash(password, 10);
 }
@@ -165,39 +180,71 @@ async function createProducts(): Promise<void> {
 }
 
 async function createTransactions(): Promise<void> {
-  // Generate random transactions for users
   const transactions: Prisma.TransactionCreateManyInput[] = [];
   const usersList = await prisma.user.findMany();
   const productsList = await prisma.product.findMany();
-  for (const user of usersList) {
-    for (const product of productsList) {
-      if (Math.random() > 0.7) {
-        const quantity = faker.number.int({
-          min: 1,
-          max: product.availableQuantity,
-        });
 
-        transactions.push({
-          userId: user.id,
-          storeId: product.storeId,
-          productId: product.id,
-          quantity,
-          totalAmount: product.actualPrice * quantity,
-          transactionDate: faker.date.recent(),
+  for (const user of usersList) {
+    if (Math.random() > 0.3) continue;
+
+    // Check if any products are available
+    const availableProducts = productsList.filter(
+      (product) => product.availableQuantity > 0,
+    );
+    if (availableProducts.length === 0) continue;
+
+    const productsCount = faker.number.int({
+      min: 1,
+      max: Math.min(2, availableProducts.length),
+    });
+
+    const selectedProducts = new Set<number>();
+
+    for (let i = 0; i < productsCount; i++) {
+      let productIndex;
+      do {
+        productIndex = faker.number.int({
+          min: 0,
+          max: availableProducts.length - 1,
         });
-      }
+      } while (selectedProducts.has(productIndex));
+
+      selectedProducts.add(productIndex);
+      const product = availableProducts[productIndex];
+
+      const quantity = faker.number.int({
+        min: 1,
+        max: product.availableQuantity,
+      });
+      transactions.push({
+        userId: user.id,
+        productId: product.id,
+        storeId: product.storeId,
+        quantity: quantity,
+        totalAmount: product.actualPrice * quantity,
+        transactionDate: faker.date.recent(),
+      });
+
+      product.availableQuantity -= quantity;
     }
   }
+
+  // Create all transactions at once
   await prisma.transaction.createMany({ data: transactions });
 
-  // Update available quantity of products based on transactions
-
-  for (const transaction of await prisma.transaction.findMany()) {
-    await prisma.product.update({
-      where: { id: transaction.productId },
-      data: { availableQuantity: { decrement: transaction.quantity } },
-    });
+  // Accumulate changes to product quantities for bulk update
+  const productUpdates: Promise<unknown>[] = [];
+  for (const product of productsList) {
+    if (product.availableQuantity >= 0) {
+      productUpdates.push(
+        prisma.product.update({
+          where: { id: product.id },
+          data: { availableQuantity: product.availableQuantity },
+        }),
+      );
+    }
   }
+  await Promise.all(productUpdates);
 }
 
 async function createReviews(): Promise<void> {
@@ -214,21 +261,6 @@ async function createReviews(): Promise<void> {
     }
   }
   await prisma.review.createMany({ data: reviews });
-}
-
-async function main() {
-  const hashedPassword = await hashPassword('password');
-  await createSpecificUsers(hashedPassword);
-  await createRandomUsers(hashedPassword);
-  await createBrands();
-  await createStores();
-  await createTags();
-  await associateTagsWithStores();
-  await createFavoriteStores();
-  await createProducts();
-  await createTransactions();
-  await createReviews();
-  console.log('Seeding completed!');
 }
 
 main()
