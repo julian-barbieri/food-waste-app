@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 @layer components {
-  .sidebar .ion-page {
-    padding-left: 70px;
+  .sidebar ion-tabs {
+    flex-direction: row-reverse !important;
   }
 
   .sidebar ion-tab-bar {

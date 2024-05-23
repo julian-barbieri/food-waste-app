@@ -21,7 +21,7 @@ import { JwtStrategy } from './jwt.strategy';
       inject: [EnvConfigService],
       useFactory: (env: EnvConfigService) => ({
         secret: env.JWT_SECRET,
-        signOptions: { expiresIn: '5m' }, // e.g. 30s, 7d, 24h
+        signOptions: { expiresIn: '30d' }, // e.g. 30s, 7d, 24h
       }),
     }),
     HashModule,
