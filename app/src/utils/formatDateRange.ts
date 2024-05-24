@@ -1,3 +1,7 @@
+// Function to capitalize the first letter of a string
+const capitalizeFirstLetter = (string: string): string => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
 interface FormattedDateRange {
   day: string;
   startTime: string;
@@ -19,7 +23,7 @@ export function formatDateRange(
   };
 
   // Formatter for the time
-  const formatterTime = new Intl.DateTimeFormat('en-US', optionsTime);
+  const formatterTime = new Intl.DateTimeFormat('es-ES', optionsTime);
 
   // Function to check if a date is today
   const isToday = (someDate: Date): boolean => {
@@ -33,8 +37,10 @@ export function formatDateRange(
 
   // Determine the day string
   const dayString = isToday(startDate)
-    ? 'Today'
-    : startDate.toLocaleDateString('en-US', { weekday: 'long' });
+    ? 'Hoy'
+    : capitalizeFirstLetter(
+        startDate.toLocaleDateString('es-ES', { weekday: 'long' }),
+      );
 
   // Format the start and end times
   const startTimeString = formatterTime.format(startDate);
@@ -53,4 +59,4 @@ export function formatDateRange(
 // const endISO = '2024-11-21T23:00:00.000Z';
 // const formattedRange = formatDateRange(startISO, endISO);
 // console.log(formattedRange);
-// Output: { day: 'Today', startTime: '21:15', endTime: '23:00' }
+// Output: { day: 'Hoy', startTime: '21:15', endTime: '23:00' }
