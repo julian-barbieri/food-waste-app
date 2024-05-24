@@ -44,6 +44,9 @@ $ docker compose up
 $ npx prisma generate
 $ npx prisma db seed
 
+# for prisma studio
+$ npx prisma studio
+
 # if problem with prisma client
 $ npx prisma migrate reset
 ```
