@@ -63,7 +63,7 @@ const Product = () => {
             <h4 className="text-xl font-bold">
               Que encontraras dentro de la caja:
             </h4>
-            <p>{query.data.description}</p>
+            <p className="w-80 text-center">{query.data.description}</p>
           </div>
 
           <div className="w-52 rounded-2xl border border-orange" />

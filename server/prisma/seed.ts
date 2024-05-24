@@ -167,7 +167,10 @@ async function createProducts(): Promise<void> {
     products.push({
       storeId: store.id,
       name: faker.commerce.productName(),
-      description: faker.commerce.productDescription(),
+      description: faker.lorem.sentence({
+        min: 15,
+        max: 40,
+      }),
       oldPrice,
       actualPrice,
       availableQuantity: faker.number.int({ min: 1, max: 5 }),
