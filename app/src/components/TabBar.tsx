@@ -9,6 +9,7 @@ import {
 
 import { Redirect, Route } from 'react-router';
 
+import Product from '@/pages/Product';
 import Products from '@/pages/Products';
 import Tab2 from '@/pages/Tab2';
 import Tab3 from '@/pages/Tab3';
@@ -20,7 +21,8 @@ export const TabBar: React.FC = ({}) => {
     <div className="md:sidebar">
       <IonTabs>
         <IonRouterOutlet>
-          <Route path="/app/products" component={Products} />
+          <Route path="/app/products/:id" component={Product} />
+          <Route exact path="/app/products" component={Products} />
           <Route path="/app/tab2" component={Tab2} />
           <Route path="/app/tab3" component={Tab3} />
           <Redirect exact from="/app" to="/app/products" />
