@@ -22,17 +22,15 @@ const ProductList: React.FC = () => {
 
   return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 w-1/2">
-          {productData.map((item, index) => (
+          {productData.map((item) => (
             <ProductCard
-                  key={index}
-                  name={item.name}
-                  description={item.description}
-                  actualPrice={item.actualPrice}
-                  pickupStartTime={item.pickupStartTime}
-                  pickupEndTime={item.pickupEndTime}
-                  store={item.store} 
-                  availableQuantity={0} 
-                  expiryDate={''} id={''} oldPrice={0} storeId={''}            />
+              key={item.id}
+              actualPrice={item.actualPrice}
+              pickupStartTime={item.pickupStartTime}
+              pickupEndTime={item.pickupEndTime}
+              store={item.store} 
+              availableQuantity={item.availableQuantity}           
+            />
         ))}
         </div>
         );

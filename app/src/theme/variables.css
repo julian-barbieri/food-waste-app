@@ -68,7 +68,71 @@ http://ionicframework.com/docs/theming/ */
   --ion-background-color: #fdf7f1;
   --ion-text-color: #5a3e2f;
   --ion-text-color-secondary: #a87c60;
+  --ion-font-family: 'Poppins';
 
   /* --inner-border-width: 0 0 4px 0; */
   --border-color: #f79c42;
+
+  /*Card colors*/
+	--ion-color-card: #8E521B;
+	--ion-color-card-rgb: 142,82,27;
+	--ion-color-card-contrast: #ffffff;
+	--ion-color-card-contrast-rgb: 255,255,255;
+	--ion-color-card-shade: #7d4818;
+	--ion-color-card-tint: #996332;
+
 }
+
+.ion-color-card {
+	--ion-color-base: var(--ion-color-card);
+	--ion-color-base-rgb: var(--ion-color-card-rgb);
+	--ion-color-contrast: var(--ion-color-card-contrast);
+	--ion-color-contrast-rgb: var(--ion-color-card-contrast-rgb);
+	--ion-color-shade: var(--ion-color-card-shade);
+	--ion-color-tint: var(--ion-color-card-tint);
+}
+
+  /*CARD*/ 
+  /*Icons*/
+  .icon-size {
+    font-size:12px;
+  }
+
+  /*Text*/
+  .title-text-size {
+    font-size:14.75px;
+  }
+  .text-size {
+    font-size:11px;
+  }
+
+  .pill-background {
+    background-color: #8E521B; /* Color de fondo para la píldora */
+    border-radius: 50px; /* Bordes redondeados para la forma de píldora */
+    padding: 5px 10px; /* Espaciado interno */
+  }
+
+  .bag-icon-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .bag-icon-container img {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  
+  .bag-icon-container .quantity-badge {
+    position: absolute;
+    top: -0.5rem;
+    left: 0.5rem;
+    color: rgb(255, 255, 255);
+    width: 1rem;
+    height: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
