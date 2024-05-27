@@ -2,6 +2,7 @@ import React from 'react';
 import { IonCard, IonCardHeader, IonCardContent, IonItem, IonLabel, IonIcon, IonImg } from '@ionic/react';
 import { star, location, time, pricetag } from 'ionicons/icons';
 import { ProductEntity } from '@/api';
+import { formatDateRange } from '@/utils/formatDateRange';
 //import { format } from 'date-fns';
 
 interface Props {
@@ -11,7 +12,6 @@ interface Props {
     store: ProductEntity['store'];
     availableQuantity: number;
 }
-
 const ProductCard: React.FC<Props> = ({ 
     actualPrice, 
     pickupStartTime, 
@@ -20,11 +20,17 @@ const ProductCard: React.FC<Props> = ({
     availableQuantity }) => {
   return (
     <IonCard className="rounded-lg overflow-hidden shadow-md">
-      <img src={store.brand.logoUrl} alt={store.brand.name} className="w-full h-16 object-cover" />
+       {/*Brand imagenes*/}
+      <img src={store.brand.logoUrl} alt={"Foto del logo"} className="rounded-lg ml-4 mt-3 absolute w-20 h-10 flex items-center" />
+      <img src={store.brand.backgroundPhotoUrl} alt={"Foto de fondo"} className="w-full h-16 object-cover" />
+      
       <IonCardContent className="p-2">
       <div className="flex justify-around">
         <div className="flex flex-col w-full">
+            {/*Brand name*/}
             <IonLabel color="card" className="text-sm font-bold title-text-size">{store.brand.name}</IonLabel>
+            
+            {/*Available quantity and Price*/}
             <div className="flex items-center justify-start mt-2">
                 <img
                     aria-hidden="true"
@@ -40,26 +46,21 @@ const ProductCard: React.FC<Props> = ({
                 </div>
             </div>
         </div>
-        <div className="flex flex-col w-full items-start justify-start ">
+        
+        {/*Date & Time and Address*/}
+        <div className="ml-2 flex flex-col w-full items-start justify-start ">
             <div className='mb-2 items-center flex'>
                 <IonIcon icon={time} color="card"  className="w-4 h-3 icon-size justify-start"/>
-                <IonLabel color="card" className="ml-2 text-size">Hoy, 10:00 - 12:00</IonLabel>
+                <IonLabel color="card" className="ml-2 text-size">
+                    {formatDateRange(pickupStartTime, pickupEndTime).day}, {formatDateRange(pickupStartTime, pickupEndTime).startTime} - {formatDateRange(pickupStartTime, pickupEndTime).endTime}
+                </IonLabel>
             </div>
             <div className='mb-2 items-center flex'>
                 <IonIcon color="card" icon={location} className="text-gray-600 w-4 h-3 icon-size items-center justify-center" />
                 <IonLabel color="card" className="ml-2 text-size" >{store.address}</IonLabel>
             </div>
-
-            {/* AGREGAR DIA Y HORARIO
-
-            <IonItem lines="none" className="flex items-center justify-between">
-                <IonIcon icon={time}  className="w-4 h-5"/>
-                <IonLabel color="card" className="ml-2">
-                    {/*format(new Date(pickupStartTime), 'Pp')}  {/*format(new Date(pickupEndTime), 'Pp')}
-                </IonLabel>
-            </IonItem>*/}
         </div>
-        </div>      
+       </div>      
       </IonCardContent>
     </IonCard>
   );

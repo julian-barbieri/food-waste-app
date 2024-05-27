@@ -3,7 +3,6 @@ import { useProductControllerFindAll } from '@/api';
 import ProductList from '@/components/ProductList';
 
 const Products: React.FC = () => {
-  const query = useProductControllerFindAll();
 
   return (
     <IonPage>

@@ -15,7 +15,7 @@ const ProductList: React.FC = () => {
 
   if (error) {
     return (
-        <p>Error loading stores</p>
+      <p>Error loading stores</p>
     );
   }
 
@@ -37,7 +37,6 @@ const ProductList: React.FC = () => {
         ))}
         </div>
         </div>
-
           <Product />
     </ div>
         );
