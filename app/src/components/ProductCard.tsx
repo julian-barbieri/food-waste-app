@@ -20,7 +20,7 @@ const ProductCard: React.FC<Props> = ({
     availableQuantity }) => {
   return (
     <IonCard className="rounded-lg overflow-hidden shadow-md">
-      <img src={store.brand.logoUrl} alt={store.brand.name} className="w-full h-24 object-cover" />
+      <img src={store.brand.logoUrl} alt={store.brand.name} className="w-full h-16 object-cover" />
       <IonCardContent className="p-2">
       <div className="flex justify-around">
         <div className="flex flex-col w-full">
@@ -32,11 +32,11 @@ const ProductCard: React.FC<Props> = ({
                     alt="Cartera Logo"
                     className='w-4 h-5'
                 />
-                <div className="text-white mt-1 absolute text-center w-4 h-4 flex items-center justify-center text-xs font-bold">
+                <div className="text-white ml-0.25 mt-1 absolute text-center w-4 h-4 flex items-center justify-center text-xs font-bold">
                     {availableQuantity}
                 </div>
                 <div className="pill-background flex items-center justify-center ml-2">
-                    <IonLabel className="text-white text-size">{actualPrice.toFixed(2)} $</IonLabel>
+                    <IonLabel className="text-white text-size">$ {actualPrice.toFixed(2)}</IonLabel>
                 </div>
             </div>
         </div>

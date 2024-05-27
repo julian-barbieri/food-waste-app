@@ -1,4 +1,4 @@
-import { IonContent, IonIcon, IonPage } from '@ionic/react';
+import {IonIcon } from '@ionic/react';
 
 import { locationOutline, timeOutline } from 'ionicons/icons';
 import { useParams } from 'react-router';
@@ -9,7 +9,7 @@ import { formatDateRange } from '@/utils/formatDateRange';
 const Product = () => {
   // get the id from the URL
   const { id } = useParams<{ id: string }>();
-  const query = useProductControllerFindOne(id);
+  const query = useProductControllerFindOne("02f4c7fd-b354-4e4f-9d19-69c474067cbc");
 
   if (query.isLoading) {
     return 'Loading product details...';
@@ -25,8 +25,8 @@ const Product = () => {
   );
 
   return (
-    <IonPage>
-      <IonContent className="flex flex-col items-center justify-center p-28">
+    <div>
+      < div className="flex flex-col items-center justify-start">
         <div className="flex h-full flex-col items-center justify-start gap-5 p-9">
           <img
             className="h-20 w-fit rounded-xl"
@@ -68,8 +68,8 @@ const Product = () => {
 
           <div className="w-52 rounded-2xl border border-orange" />
         </div>
-      </IonContent>
-    </IonPage>
+      </ div>
+    </div>
   );
 };
 
