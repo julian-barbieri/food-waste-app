@@ -11,6 +11,7 @@ import { EnvConfigModule } from './envConfig/envConfig.module';
 import { UserModule } from './user/user.module';
 import { StoresModule } from './stores/stores.module';
 import { ProductModule } from './product/product.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { ProductModule } from './product/product.module';
     AuthModule,
     StoresModule,
     ProductModule,
+    TransactionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -4,7 +4,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiTags, ApiOkResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 import { ProductEntity } from './entities/product.entity';
-import { StoreEntity } from 'src/stores/entities/store.entity';
+
 
 @Controller('products')
 @ApiTags('products')
