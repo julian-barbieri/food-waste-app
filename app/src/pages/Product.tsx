@@ -10,7 +10,7 @@ import { formatDateRange } from '@/utils/formatDateRange';
 const Product = () => {
   // get the id from the URL
   const { id } = useParams<{ id: string }>();
-  const query = useProductControllerFindOne(id);
+  const query = useProductControllerFindOne("02f4c7fd-b354-4e4f-9d19-69c474067cbc");
 
   const [quantity, setQuantity] = useState(1);
 
