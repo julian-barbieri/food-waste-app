@@ -49,7 +49,7 @@ const ProductList: React.FC = () => {
           </div>
           {/*Divide line*/}
             <div className="rounded-2xl border border-orange" />
-            <Product />
+            <Product id={selectedProduct}/>
       </ div>
         );
     };

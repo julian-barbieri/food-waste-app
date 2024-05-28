@@ -7,10 +7,16 @@ import { useParams } from 'react-router';
 import { ProductEntity, useProductControllerFindOne } from '@/api';
 import { formatDateRange } from '@/utils/formatDateRange';
 
-const Product = () => {
+
+interface Props {
+  id: string;
+}
+const Product: React.FC<Props> = ({
+  id,
+}) => {
   // get the id from the URL
-  const { id } = useParams<{ id: string }>();
-  const query = useProductControllerFindOne("02f4c7fd-b354-4e4f-9d19-69c474067cbc");
+  //const { id } = useParams<{ id: string }>();
+  const query = useProductControllerFindOne(id);
 
   const [quantity, setQuantity] = useState(1);
 
@@ -46,7 +52,7 @@ const Product = () => {
   return (
     <div>
       < div className="flex flex-col items-center justify-start">
-        <div className="flex h-full flex-col items-center justify-start gap-5 p-9">
+        <div className="flex h-full flex-col items-center justify-start gap-5 pl-10 pr-10">
           <img
             className="h-20 w-fit rounded-xl"
             src={query.data.store.brand.logoUrl}
@@ -80,7 +86,7 @@ const Product = () => {
 
           <div className="flex flex-col place-content-center items-center gap-3">
             <h4 className="text-xl font-bold">
-              Que encontraras dentro de la caja:
+              Qué encontraras dentro de la caja:
             </h4>
             <p className="w-80 text-center">{query.data.description}</p>
           </div>
