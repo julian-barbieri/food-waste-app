@@ -1,25 +1,32 @@
 import React from 'react';
-import { IonCard, IonCardHeader, IonCardContent, IonItem, IonLabel, IonIcon, IonImg } from '@ionic/react';
+import { IonCard, IonCardHeader, IonCardContent, IonItem, IonLabel, IonIcon, IonImg, IonRouterLink, IonButton } from '@ionic/react';
 import { star, location, time, pricetag } from 'ionicons/icons';
 import { ProductEntity } from '@/api';
 import { formatDateRange } from '@/utils/formatDateRange';
-//import { format } from 'date-fns';
+
 
 interface Props {
+    id: string;
     actualPrice: number;
     pickupStartTime: string;
     pickupEndTime: string;
     store: ProductEntity['store'];
     availableQuantity: number;
+    onClick: () => void;
+    isSelected: boolean;
 }
 const ProductCard: React.FC<Props> = ({ 
+    id,
     actualPrice, 
     pickupStartTime, 
     pickupEndTime, 
     store,
-    availableQuantity }) => {
+    availableQuantity,
+    onClick,
+    isSelected,
+ }) => {
   return (
-    <IonCard className="rounded-lg overflow-hidden shadow-md">
+    <IonCard button onClick={onClick} className={`rounded-lg overflow-hidden shadow-md ${isSelected ? 'border-red-500' : ''}`}>
        {/*Brand imagenes*/}
       <img src={store.brand.logoUrl} alt={"Foto del logo"} className="rounded-lg ml-4 mt-3 absolute w-20 h-10 flex items-center" />
       <img src={store.brand.backgroundPhotoUrl} alt={"Foto de fondo"} className="w-full h-16 object-cover" />
@@ -27,6 +34,7 @@ const ProductCard: React.FC<Props> = ({
       <IonCardContent className="p-2">
       <div className="flex justify-around">
         <div className="flex flex-col w-full">
+            
             {/*Brand name*/}
             <IonLabel color="card" className="text-sm font-bold title-text-size">{store.brand.name}</IonLabel>
             
@@ -63,6 +71,7 @@ const ProductCard: React.FC<Props> = ({
        </div>      
       </IonCardContent>
     </IonCard>
+
   );
 };
 

@@ -136,3 +136,8 @@ http://ionicframework.com/docs/theming/ */
     font-size: 0.75rem;
     font-weight: bold;
   }
+
+  /*OnClick*/
+  .border-red-500 {
+    border: 4px solid #8E521B;
+  }

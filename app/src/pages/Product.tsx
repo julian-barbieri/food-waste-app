@@ -3,7 +3,7 @@ import {IonIcon } from '@ionic/react';
 import { locationOutline, timeOutline } from 'ionicons/icons';
 import { useParams } from 'react-router';
 
-import { useProductControllerFindOne } from '@/api';
+import { ProductEntity, useProductControllerFindOne } from '@/api';
 import { formatDateRange } from '@/utils/formatDateRange';
 
 const Product = () => {
