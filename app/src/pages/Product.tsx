@@ -1,7 +1,7 @@
 import { IonButton, IonContent, IonIcon, IonPage } from '@ionic/react';
 
 import { locationOutline, timeOutline } from 'ionicons/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { ProductEntity, useProductControllerFindOne } from '@/api';
@@ -20,12 +20,26 @@ const Product: React.FC<Props> = ({
 
   const [quantity, setQuantity] = useState(1);
 
+  useEffect(() => {
+    // Resetear la cantidad cuando el id cambie
+    setQuantity(1);
+  }, [id]);
+
   if (query.isLoading) {
     return 'Loading product details...';
   }
 
-  if (query.isError || !query.data) {
+  if (query.isError) {
     return 'Error loading product details';
+  }
+
+  //Message when no product is selected
+  if(!query.data){
+    return (
+      <div className='pl-10 pr-10 font-mono text-1xl font-bold'>
+        Seleccioná el producto que deseas comprar
+      </div>
+    );
   }
 
   const decrementQuantity = () => {
