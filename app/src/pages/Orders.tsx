@@ -7,16 +7,21 @@ import {
 } from '@ionic/react';
 
 import { useAppControllerFreis } from '@/api';
+import Title from '@/components/Title';
+import Logo from '@/components/Logo';
 
-const Tab2: React.FC = () => {
+const Orders: React.FC = () => {
   const query = useAppControllerFreis('hola', 'mundo', {
     zeta: 'zeta',
   });
   return (
     <IonPage>
-      <IonContent fullscreen>{JSON.stringify(query.data)}</IonContent>
+      <IonContent fullscreen>
+        <Logo />
+        <Title text={'Orders'} />
+      </IonContent>
     </IonPage>
   );
 };
 
-export default Tab2;
+export default Orders;

@@ -9,10 +9,10 @@ import {
 
 import { Redirect, Route } from 'react-router';
 
-import Product from '@/pages/Product';
+import Product from '@/components/Product';
+import Orders from '@/pages/Orders';
 import Products from '@/pages/Products';
-import Tab2 from '@/pages/Tab2';
-import Tab3 from '@/pages/Tab3';
+import Profile from '@/pages/Profile';
 import { useAuthStoreActions } from '@/stores/auth';
 
 export const TabBar: React.FC = ({}) => {
@@ -23,8 +23,8 @@ export const TabBar: React.FC = ({}) => {
         <IonRouterOutlet>
           <Route path="/app/products/:id" component={Product} />
           <Route exact path="/app/products" component={Products} />
-          <Route path="/app/tab2" component={Tab2} />
-          <Route path="/app/tab3" component={Tab3} />
+          <Route path="/app/orders" component={Orders} />
+          <Route path="/app/Profile" component={Profile} />
           <Redirect exact from="/app" to="/app/products" />
         </IonRouterOutlet>
 
@@ -43,8 +43,8 @@ export const TabBar: React.FC = ({}) => {
           </IonTabButton>
           <IonTabButton
             className="transition-all duration-300 hover:rounded-full hover:bg-white hover:bg-opacity-30 hover:ring-4 hover:ring-transparent"
-            tab="tab2"
-            href="/app/tab2"
+            tab="orders"
+            href="/app/orders"
           >
             <IonImg
               aria-hidden="true"
@@ -55,8 +55,8 @@ export const TabBar: React.FC = ({}) => {
           </IonTabButton>
           <IonTabButton
             className="transition-all duration-300 hover:rounded-full hover:bg-white hover:bg-opacity-30 hover:ring-4 hover:ring-transparent"
-            tab="tab3"
-            href="/app/tab3"
+            tab="Profile"
+            href="/app/Profile"
           >
             <IonImg
               aria-hidden="true"
