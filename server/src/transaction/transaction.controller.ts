@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { TransactionEntity } from './entities/transaction.entity';
 
 @Controller('transactions')
@@ -28,10 +28,22 @@ export class TransactionController {
   }
 
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.transactionService.findOne(id);
-  }
+    //GET BY ID
+    @Get(':id')
+    @ApiOkResponse({
+      type: TransactionEntity,
+      description: 'Get transaction by id',
+    })
+    @ApiNotFoundResponse({
+      description: 'Transaction not found',
+    })
+    async findOne(@Param('id') id: string): Promise<TransactionEntity> {
+      const transaction = await this.transactionService.findOne(id);
+      if (!transaction) {
+        throw new NotFoundException(`Transaction with id = ${id} not found`);
+      }
+      return new TransactionEntity(transaction);
+    }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTransactionDto: UpdateTransactionDto) {
