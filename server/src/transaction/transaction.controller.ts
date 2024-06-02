@@ -27,6 +27,23 @@ export class TransactionController {
     return transactions.map((transaction) => new TransactionEntity(transaction));
   }
 
+  //GET ALL
+  @Get('/orders/:id')
+  @ApiOkResponse({
+    type: TransactionEntity,
+    isArray: true,
+    description: 'List all transactions not delivered by user id',
+  })
+  @ApiNotFoundResponse({
+    description: 'Transaction not found',
+  })
+  async findAllNotDeliveredById(@Param('id') id: string): Promise<TransactionEntity[]> {
+    const transactions = await this.transactionService.findAllNotDeliveredById(id);
+    if (!transactions) {
+      throw new NotFoundException(`Transaction with id = ${id} not found`);
+    }
+    return transactions.map((transaction) => new TransactionEntity(transaction));
+  }
 
     //GET BY ID
     @Get(':id')

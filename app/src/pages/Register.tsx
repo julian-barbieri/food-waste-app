@@ -136,7 +136,10 @@ const Register: React.FC = () => {
                 Registrarse
               </IonButton>
 
-              <Link to="/login" className="text-dark text-center font-bold hover:underline">
+              <Link
+                to="/login"
+                className="text-dark text-center font-bold hover:underline"
+              >
                 Ingresar
               </Link>
             </div>

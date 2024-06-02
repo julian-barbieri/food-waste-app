@@ -1,13 +1,13 @@
-import { IonContent, IonPage, IonImg, IonTitle } from '@ionic/react';
+import { IonContent, IonImg, IonPage, IonTitle } from '@ionic/react';
+
 import { useProductControllerFindAll } from '@/api';
+import Logo from '@/components/Logo';
 import ProductList from '@/components/ProductList';
 import Title from '@/components/Title';
-import Logo from '@/components/Logo';
 
 const Products: React.FC = () => {
-
   return (
-    <IonPage >
+    <IonPage>
       <IonContent scrollY>
         <Logo />
         <Title text={'Stores'}></Title>

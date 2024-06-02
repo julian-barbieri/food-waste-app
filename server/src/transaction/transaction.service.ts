@@ -11,8 +11,43 @@ export class TransactionService {
     return 'This action adds a new transaction';
   }
 
+  //GET ALL
   findAll() {
-    return this.prisma.transaction.findMany();
+    return this.prisma.transaction.findMany({
+      include: {
+        user: true,
+        product:{
+          include: {
+            store: {
+              include: {
+                user: true
+              }
+            }
+        }}
+      }
+    });
+  }
+
+  //GET ACTIVE TRANSACTIONS by ID
+
+  findAllNotDeliveredById(id: string) {
+    return this.prisma.transaction.findMany({
+      where: { 
+        delivered: false,
+        userId: id,
+      },
+      include: {
+        user: true,
+        product:{
+          include: {
+            store: {
+              include: {
+                user: true
+              }
+            }
+        }}
+      }
+    });
   }
 
   findOne(id: string) {

@@ -11,10 +11,7 @@ export class ProductEntity implements Product {
   storeId: string;
 
   @ApiProperty()
-  name: string;
-
-  @ApiProperty()
-  description: string;
+  type: string;
 
   @ApiProperty()
   oldPrice: number;
@@ -26,9 +23,6 @@ export class ProductEntity implements Product {
   availableQuantity: number;
 
   @ApiProperty()
-  expiryDate: Date;
-
-  @ApiProperty()
   pickupStartTime: Date;
 
   @ApiProperty()
@@ -36,6 +30,9 @@ export class ProductEntity implements Product {
 
   @ApiProperty()
   store: StoreEntity;
+
+  /*@ApiProperty()
+  transactions?: TransactionEntity[];*/
 
   constructor({ store, ...data }: Partial<ProductEntity>) {
     Object.assign(this, data);

@@ -6,7 +6,6 @@ import { PrismaModule, QueryInfo, loggingMiddleware } from 'nestjs-prisma';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { BrandModule } from './brand/brand.module';
 import { EnvConfigModule } from './envConfig/envConfig.module';
 import { UserModule } from './user/user.module';
 import { StoresModule } from './stores/stores.module';
@@ -33,7 +32,6 @@ import { TransactionModule } from './transaction/transaction.module';
       },
     }),
     UserModule,
-    BrandModule,
     AuthModule,
     StoresModule,
     ProductModule,

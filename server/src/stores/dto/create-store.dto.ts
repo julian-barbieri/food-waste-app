@@ -1,11 +1,28 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
+import { ProductEntity } from 'src/product/entities/product.entity';
 
 export class CreateStoreDto {
     
     @ApiProperty()
     @IsString()
-    brandId: string;
+    userId: string;
+
+    @ApiProperty()
+    @IsString()
+    name: string;
+
+    @ApiProperty()
+    @IsString()
+    description: string;
+
+    @ApiProperty()
+    @IsString()
+    logoUrl: string;
+
+    @ApiProperty()
+    @IsString()
+    backgroundPhotoUrl: string;
 
     @ApiProperty()
     @IsString()
@@ -14,5 +31,10 @@ export class CreateStoreDto {
     @ApiProperty()
     @IsOptional()
     isActive?: boolean = true;
+
+    @ApiProperty({ type: [ProductEntity] })
+    @IsArray()
+    products: ProductEntity[];
+
 
 }

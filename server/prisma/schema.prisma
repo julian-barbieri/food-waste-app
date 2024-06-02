@@ -19,49 +19,25 @@ model User {
   lastName       String
   email          String              @unique
   hashedPassword String
-  brands         Brand[]             @relation("UserBrands")
   favoriteStores UserFavoriteStore[]
   transactions   Transaction[]
+  stores         Store[]
 }
 
-model Brand {
-  id                 String  @id @default(uuid())
+model Store {
+  id                 String              @id @default(uuid())
   userId             String
   name               String
   description        String
   logoUrl            String
   backgroundPhotoUrl String
-  user               User    @relation("UserBrands", fields: [userId], references: [id])
-  stores             Store[]
-}
-
-model Store {
-  id           String              @id @default(uuid())
-  brandId      String
-  address      String
-  latitude     Float
-  longitude    Float
-  isActive     Boolean
-  brand        Brand               @relation(fields: [brandId], references: [id])
-  products     Product[]
-  transactions Transaction[]
-  tags         StoreTag[]
-  favoritedBy  UserFavoriteStore[]
-}
-
-model Tag {
-  id        String     @id @default(uuid())
-  name      String
-  storeTags StoreTag[]
-}
-
-model StoreTag {
-  storeId String
-  tagId   String
-  store   Store  @relation(fields: [storeId], references: [id])
-  tag     Tag    @relation(fields: [tagId], references: [id])
-
-  @@id([storeId, tagId])
+  address            String
+  latitude           Float
+  longitude          Float
+  isActive           Boolean
+  user               User                @relation(fields: [userId], references: [id])
+  products           Product[]
+  favoritedBy        UserFavoriteStore[]
 }
 
 model UserFavoriteStore {
@@ -76,12 +52,10 @@ model UserFavoriteStore {
 model Product {
   id                String        @id @default(uuid())
   storeId           String
-  name              String
-  description       String
+  type              String
   oldPrice          Float
   actualPrice       Float
   availableQuantity Int
-  expiryDate        DateTime
   pickupStartTime   DateTime
   pickupEndTime     DateTime
   store             Store         @relation(fields: [storeId], references: [id])
@@ -89,16 +63,15 @@ model Product {
 }
 
 model Transaction {
-  id              String   @id @default(uuid())
+  id              String      @id @default(uuid())
   userId          String
-  storeId         String
   productId       String
   quantity        Int
   totalAmount     Float
   transactionDate DateTime
-  user            User     @relation(fields: [userId], references: [id])
-  store           Store    @relation(fields: [storeId], references: [id])
-  product         Product  @relation(fields: [productId], references: [id])
+  delivered       Boolean
+  user            User        @relation(fields: [userId], references: [id])
+  product         Product     @relation(fields: [productId], references: [id])
   review          Review?
 }
 

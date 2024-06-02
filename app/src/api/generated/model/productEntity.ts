@@ -10,13 +10,11 @@ import type { StoreEntity } from './storeEntity';
 export interface ProductEntity {
   actualPrice: number;
   availableQuantity: number;
-  description: string;
-  expiryDate: string;
   id: string;
-  name: string;
   oldPrice: number;
   pickupEndTime: string;
   pickupStartTime: string;
   store: StoreEntity;
   storeId: string;
+  type: string;
 }

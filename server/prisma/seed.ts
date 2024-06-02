@@ -5,16 +5,12 @@ import * as bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 const numberOfUsers = 100;
-const numberOfTags = 10;
 
 async function main() {
   const hashedPassword = await hashPassword('password');
   await createSpecificUsers(hashedPassword);
   await createRandomUsers(hashedPassword);
-  await createBrands();
   await createStores();
-  await createTags();
-  await associateTagsWithStores();
   await createFavoriteStores();
   await createProducts();
   await createTransactions();
@@ -66,65 +62,25 @@ async function createRandomUsers(hashedPassword: string): Promise<void> {
   await prisma.user.createMany({ data: users });
 }
 
-async function createBrands(): Promise<void> {
-  // Generate random brands for a subset of users
-  const brands: Prisma.BrandCreateManyInput[] = [];
+async function createStores(): Promise<void> {
+  // Generate random stores for a subset of users
+  const stores: Prisma.StoreCreateManyInput[] = [];
   const usersList = await prisma.user.findMany();
   for (const user of usersList) {
-    if (Math.random() > 0.6) continue; // Skip creating brands for some users
-    brands.push({
+    if (Math.random() > 0.6) continue; // Skip creating stores for some users
+    stores.push({
       userId: user.id,
       name: faker.company.name(),
       description: faker.company.catchPhrase(),
       logoUrl: faker.image.urlLoremFlickr({ category: 'business' }),
       backgroundPhotoUrl: faker.image.urlLoremFlickr({ category: 'abstract' }),
+      address: faker.location.streetAddress(),
+      latitude: faker.location.latitude(),
+      longitude: faker.location.longitude(),
+      isActive: faker.datatype.boolean({ probability: 0.9 }),
     });
   }
-  await prisma.brand.createMany({ data: brands });
-}
-
-async function createStores(): Promise<void> {
-  // Generate random stores for each brand, between 1 to 5 stores per brand
-  const stores: Prisma.StoreCreateManyInput[] = [];
-  const brandsList = await prisma.brand.findMany();
-  for (const brand of brandsList) {
-    const storeCount = faker.number.int({ min: 1, max: 5 });
-    for (let i = 0; i < storeCount; i++) {
-      stores.push({
-        brandId: brand.id,
-        address: faker.location.streetAddress(),
-        latitude: faker.location.latitude(),
-        longitude: faker.location.longitude(),
-        isActive: faker.datatype.boolean({ probability: 0.9 }),
-      });
-    }
-  }
   await prisma.store.createMany({ data: stores });
-}
-
-async function createTags(): Promise<void> {
-  // Generate random tags
-  const tags: Prisma.TagCreateManyInput[] = [];
-  for (let i = 0; i < numberOfTags; i++) {
-    tags.push({ name: faker.commerce.department() });
-  }
-  await prisma.tag.createMany({ data: tags });
-}
-
-async function associateTagsWithStores(): Promise<void> {
-  // Associate tags with stores randomly
-  const storeTags: Prisma.StoreTagCreateManyInput[] = [];
-  const storesList = await prisma.store.findMany();
-  const tagsList = await prisma.tag.findMany();
-  for (const store of storesList) {
-    for (const tag of tagsList) {
-      if (Math.random() > 0.5) {
-        // Associate about half of the tags with each store
-        storeTags.push({ storeId: store.id, tagId: tag.id });
-      }
-    }
-  }
-  await prisma.storeTag.createMany({ data: storeTags });
 }
 
 async function createFavoriteStores(): Promise<void> {
@@ -166,15 +122,10 @@ async function createProducts(): Promise<void> {
     ); // Add 1 to 3 hours
     products.push({
       storeId: store.id,
-      name: faker.commerce.productName(),
-      description: faker.lorem.sentence({
-        min: 15,
-        max: 40,
-      }),
+      type: faker.commerce.productAdjective(),
       oldPrice,
       actualPrice,
       availableQuantity: faker.number.int({ min: 1, max: 5 }),
-      expiryDate: faker.date.future(),
       pickupStartTime,
       pickupEndTime,
     });
@@ -222,10 +173,10 @@ async function createTransactions(): Promise<void> {
       transactions.push({
         userId: user.id,
         productId: product.id,
-        storeId: product.storeId,
         quantity: quantity,
         totalAmount: product.actualPrice * quantity,
         transactionDate: faker.date.recent(),
+        delivered: faker.datatype.boolean(),
       });
 
       product.availableQuantity -= quantity;

@@ -7,13 +7,10 @@ import { useParams } from 'react-router';
 import { ProductEntity, useProductControllerFindOne } from '@/api';
 import { formatDateRange } from '@/utils/formatDateRange';
 
-
 interface Props {
   id: string;
 }
-const Product: React.FC<Props> = ({
-  id,
-}) => {
+const Product: React.FC<Props> = ({ id }) => {
   // get the id from the URL
   //const { id } = useParams<{ id: string }>();
   const query = useProductControllerFindOne(id);
@@ -34,10 +31,10 @@ const Product: React.FC<Props> = ({
   }
 
   //Message when no product is selected
-  if(!query.data){
+  if (!query.data) {
     return (
-      <div className='pl-10 pr-10 font-mono text-1xl font-bold'>
-        Seleccioná el producto que deseas comprar
+      <div className="text-1xl pl-10 pr-10 font-mono font-bold">
+        Seleccioná el producto que deseas ver
       </div>
     );
   }
@@ -65,16 +62,16 @@ const Product: React.FC<Props> = ({
 
   return (
     <div>
-      < div className="flex flex-col items-center justify-start">
+      <div className="flex flex-col items-center justify-start">
         <div className="flex h-full flex-col items-center justify-start gap-5 pl-10 pr-10">
           <img
             className="h-20 w-fit rounded-xl"
-            src={query.data.store.brand.logoUrl}
-            alt={`${query.data.store.brand.name} Logo`}
+            src={query.data.store.logoUrl}
+            alt={`${query.data.store.name} Logo`}
           />
 
           <h1 className="font-mono text-3xl font-bold">
-            {query.data.store.brand.name}
+            {query.data.store.name}
           </h1>
 
           <div className="w-52 rounded-2xl border border-orange" />
@@ -102,7 +99,7 @@ const Product: React.FC<Props> = ({
             <h4 className="text-xl font-bold">
               Qué encontraras dentro de la caja:
             </h4>
-            <p className="w-80 text-center">{query.data.description}</p>
+            <p className="w-80 text-center">{query.data.store.description}</p>
           </div>
 
           <div className="w-52 rounded-2xl border border-orange" />
@@ -136,7 +133,7 @@ const Product: React.FC<Props> = ({
           <div className="w-52 rounded-2xl border border-orange" />
 
           <div className="flex flex-col place-content-center items-center gap-3">
-            <h4 className="text-xl font-bold">Magic Box</h4>
+            <h4 className="text-xl font-bold">{query.data.type}</h4>
 
             <div className="flex flex-col items-center gap-1">
               <span className="text-gray-400 text-sm line-through">
@@ -153,7 +150,7 @@ const Product: React.FC<Props> = ({
             </IonButton>
           </div>
         </div>
-      </ div>
+      </div>
     </div>
   );
 };

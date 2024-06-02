@@ -1,5 +1,3 @@
-import Logo from '@/components/Logo';
-import Title from '@/components/Title';
 import {
   IonContent,
   IonHeader,
@@ -7,6 +5,9 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
+
+import Logo from '@/components/Logo';
+import Title from '@/components/Title';
 
 const Profile: React.FC = () => {
   return (

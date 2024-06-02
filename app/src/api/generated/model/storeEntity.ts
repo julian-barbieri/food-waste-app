@@ -5,14 +5,16 @@
  * The Food Waste App API description
  * OpenAPI spec version: 1.0.0
  */
-import type { BrandEntity } from './brandEntity';
 
 export interface StoreEntity {
   address: string;
-  brand: BrandEntity;
-  brandId: string;
+  backgroundPhotoUrl: string;
+  description: string;
   id: string;
   isActive: boolean;
   latitude: number;
+  logoUrl: string;
   longitude: number;
+  name: string;
+  userId: string;
 }

@@ -1,11 +1,11 @@
 import React from 'react';
 
 interface TitleProps {
-    text: string;
+  text: string;
 }
 
 const Title: React.FC<TitleProps> = ({ text }) => {
-    return <h1 className='text-2xl font-bold ml-16 pl-1 pb-2'>{text}</h1>;
+  return <h1 className="ml-16 pb-2 pl-1 text-2xl font-bold">{text}</h1>;
 };
 
 export default Title;

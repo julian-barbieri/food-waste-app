@@ -1,18 +1,20 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Transaction } from "@prisma/client";
 import { ProductEntity } from "src/product/entities/product.entity";
-import { StoreEntity } from "src/stores/entities/store.entity";
 import { UserEntity } from "src/user/entities/user.entity";
 
 export class TransactionEntity implements Transaction {
+    
+    /*
+    user            User        @relation(fields: [userId], references: [id])
+    product         Product     @relation(fields: [productId], references: [id])
+    review          Review?*/
+    
     @ApiProperty()
     id: string;
 
     @ApiProperty()
     userId: string;
-
-    @ApiProperty()
-    storeId: string;
 
     @ApiProperty()
     productId: string;
@@ -27,31 +29,26 @@ export class TransactionEntity implements Transaction {
     transactionDate: Date;
 
     @ApiProperty()
+    delivered: boolean;
+
+    @ApiProperty()
     user: UserEntity;
 
     @ApiProperty()
     product: ProductEntity;
 
-    @ApiProperty()
-    store: StoreEntity;
+    //Agregar reviews mas adelante
+    /*@ApiProperty()
+    review: any;*/
     
-    constructor({product, user, store, ...data }: Partial<TransactionEntity>) {
+    constructor(partial: Partial<TransactionEntity>) {
+        Object.assign(this, partial);
         
-        Object.assign(this, data);
-        
-        if (product) {
-            this.product = new ProductEntity(product);
+        /*if (partial.user) {
+          this.user = new UserEntity(partial.user);
+        }*/
+        if (partial.product) {
+          this.product = new ProductEntity(partial.product);
         }
-
-        if (store) {
-            this.store = new StoreEntity(store);
-        }
-
-        if (user) {
-            this.user = new UserEntity(user);
-        }
-
     }
-
-    
 }

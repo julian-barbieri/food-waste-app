@@ -5,7 +5,6 @@ import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class ProductService {
-  
   constructor(private prisma: PrismaService) {}
   
   create(createProductDto: CreateProductDto) {
@@ -15,11 +14,7 @@ export class ProductService {
   findAll() {
     return this.prisma.product.findMany({
       include: {
-        store: {
-          include: {
-            brand: true,
-          }
-        }
+        store: true
       }
     });
   }
@@ -28,11 +23,7 @@ export class ProductService {
     return this.prisma.product.findUnique({
       where: { id },
       include: {
-        store: {
-          include: {
-            brand: true,
-          }
-        }
+        store: true
       }
     });
   }
