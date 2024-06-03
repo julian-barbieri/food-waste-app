@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, UseGuards } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
-import { ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { TransactionEntity } from './entities/transaction.entity';
+import { User } from '@prisma/client';
+import { UserReq } from 'src/auth/UserReq.decorator';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('transactions')
 @ApiTags('transactions')
@@ -16,32 +19,21 @@ export class TransactionController {
   }
 
   //GET ALL
-  @Get()
+  @Get('/my-orders')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({
     type: TransactionEntity,
     isArray: true,
-    description: 'List all transactions',
-  })
-  async findAll(): Promise<TransactionEntity[]> {
-    const transactions = await this.transactionService.findAll();
-    return transactions.map((transaction) => new TransactionEntity(transaction));
-  }
-
-  //GET ALL
-  @Get('/orders/:id')
-  @ApiOkResponse({
-    type: TransactionEntity,
-    isArray: true,
-    description: 'List all transactions not delivered by user id',
+    description: 'List all transactions not delivered',
   })
   @ApiNotFoundResponse({
     description: 'Transaction not found',
   })
-  async findAllNotDeliveredById(@Param('id') id: string): Promise<TransactionEntity[]> {
-    const transactions = await this.transactionService.findAllNotDeliveredById(id);
-    if (!transactions) {
-      throw new NotFoundException(`Transaction with id = ${id} not found`);
-    }
+  async findAllNotDeliveredById(
+    @UserReq() userReq: User,
+  ): Promise<TransactionEntity[]> {
+    const transactions = await this.transactionService.findAllNotDeliveredById(userReq.id);
     return transactions.map((transaction) => new TransactionEntity(transaction));
   }
 

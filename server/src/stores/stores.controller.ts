@@ -27,6 +27,8 @@ import { FindAllStoresQuery } from './dto/find-all.query';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { StoreEntity } from './entities/store.entity';
 import { StoresService } from './stores.service';
+import { User } from '@prisma/client';
+import { UserReq } from 'src/auth/UserReq.decorator';
 
 @Controller('stores')
 @ApiTags('stores')
@@ -63,6 +65,8 @@ export class StoresController {
 
   //GET ALL ACTIVES
   @Get('/activeStores')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({
     type: StoreEntity,
     isArray: true,
@@ -75,6 +79,8 @@ export class StoresController {
 
   //GET BY ID
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({
     type: StoreEntity,
     description: 'Get store by id',

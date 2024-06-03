@@ -36,6 +36,7 @@ const ProductCard: React.FC<Props> = ({
   onClick,
   isSelected,
 }) => {
+  const dateRange = formatDateRange(pickupStartTime, pickupEndTime);
   return (
     <IonCard
       button
@@ -93,9 +94,9 @@ const ProductCard: React.FC<Props> = ({
                 className="icon-size h-3 w-4 justify-start"
               />
               <IonLabel color="card" className="text-size ml-2">
-                {formatDateRange(pickupStartTime, pickupEndTime).day},{' '}
-                {formatDateRange(pickupStartTime, pickupEndTime).startTime} -{' '}
-                {formatDateRange(pickupStartTime, pickupEndTime).endTime}
+                {dateRange.day},{' '}
+                {dateRange.startTime} -{' '}
+                {dateRange.endTime}
               </IonLabel>
             </div>
             <div className="mb-2 flex items-center">

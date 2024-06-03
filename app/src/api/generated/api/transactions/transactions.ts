@@ -102,180 +102,18 @@ export const useTransactionControllerCreate = <
 
   return useMutation(mutationOptions);
 };
-export const transactionControllerFindAll = (
-  options?: SecondParameter<typeof customFetch>,
-  signal?: AbortSignal,
-) => {
-  return customFetch<TransactionEntity[]>(
-    { url: `/transactions`, method: 'GET', signal },
-    options,
-  );
-};
-
-export const getTransactionControllerFindAllQueryKey = () => {
-  return [`/transactions`] as const;
-};
-
-export const getTransactionControllerFindAllQueryOptions = <
-  TData = Awaited<ReturnType<typeof transactionControllerFindAll>>,
-  TError = unknown,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof transactionControllerFindAll>>,
-      TError,
-      TData
-    >
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ?? getTransactionControllerFindAllQueryKey();
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof transactionControllerFindAll>>
-  > = ({ signal }) => transactionControllerFindAll(requestOptions, signal);
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof transactionControllerFindAll>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
-
-export type TransactionControllerFindAllQueryResult = NonNullable<
-  Awaited<ReturnType<typeof transactionControllerFindAll>>
->;
-export type TransactionControllerFindAllQueryError = unknown;
-
-export const useTransactionControllerFindAll = <
-  TData = Awaited<ReturnType<typeof transactionControllerFindAll>>,
-  TError = unknown,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof transactionControllerFindAll>>,
-      TError,
-      TData
-    >
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions = getTransactionControllerFindAllQueryOptions(options);
-
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-};
-
-export const prefetchTransactionControllerFindAll = async <
-  TData = Awaited<ReturnType<typeof transactionControllerFindAll>>,
-  TError = unknown,
->(
-  queryClient: QueryClient,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof transactionControllerFindAll>>,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-): Promise<QueryClient> => {
-  const queryOptions = getTransactionControllerFindAllQueryOptions(options);
-
-  await queryClient.prefetchQuery(queryOptions);
-
-  return queryClient;
-};
-
-export const getTransactionControllerFindAllSuspenseQueryOptions = <
-  TData = Awaited<ReturnType<typeof transactionControllerFindAll>>,
-  TError = unknown,
->(options?: {
-  query?: Partial<
-    UseSuspenseQueryOptions<
-      Awaited<ReturnType<typeof transactionControllerFindAll>>,
-      TError,
-      TData
-    >
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ?? getTransactionControllerFindAllQueryKey();
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof transactionControllerFindAll>>
-  > = ({ signal }) => transactionControllerFindAll(requestOptions, signal);
-
-  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
-    Awaited<ReturnType<typeof transactionControllerFindAll>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
-
-export type TransactionControllerFindAllSuspenseQueryResult = NonNullable<
-  Awaited<ReturnType<typeof transactionControllerFindAll>>
->;
-export type TransactionControllerFindAllSuspenseQueryError = unknown;
-
-export const useTransactionControllerFindAllSuspense = <
-  TData = Awaited<ReturnType<typeof transactionControllerFindAll>>,
-  TError = unknown,
->(options?: {
-  query?: Partial<
-    UseSuspenseQueryOptions<
-      Awaited<ReturnType<typeof transactionControllerFindAll>>,
-      TError,
-      TData
-    >
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions =
-    getTransactionControllerFindAllSuspenseQueryOptions(options);
-
-  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
-    TData,
-    TError
-  > & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-};
-
 export const transactionControllerFindAllNotDeliveredById = (
-  id: string,
   options?: SecondParameter<typeof customFetch>,
   signal?: AbortSignal,
 ) => {
   return customFetch<TransactionEntity[]>(
-    {
-      url: `/transactions/orders/${encodeURIComponent(String(id))}`,
-      method: 'GET',
-      signal,
-    },
+    { url: `/transactions/my-orders`, method: 'GET', signal },
     options,
   );
 };
 
-export const getTransactionControllerFindAllNotDeliveredByIdQueryKey = (
-  id: string,
-) => {
-  return [`/transactions/orders/${id}`] as const;
+export const getTransactionControllerFindAllNotDeliveredByIdQueryKey = () => {
+  return [`/transactions/my-orders`] as const;
 };
 
 export const getTransactionControllerFindAllNotDeliveredByIdQueryOptions = <
@@ -283,38 +121,28 @@ export const getTransactionControllerFindAllNotDeliveredByIdQueryOptions = <
     ReturnType<typeof transactionControllerFindAllNotDeliveredById>
   >,
   TError = void,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<
-          ReturnType<typeof transactionControllerFindAllNotDeliveredById>
-        >,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-) => {
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof transactionControllerFindAllNotDeliveredById>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ??
-    getTransactionControllerFindAllNotDeliveredByIdQueryKey(id);
+    getTransactionControllerFindAllNotDeliveredByIdQueryKey();
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof transactionControllerFindAllNotDeliveredById>>
   > = ({ signal }) =>
-    transactionControllerFindAllNotDeliveredById(id, requestOptions, signal);
+    transactionControllerFindAllNotDeliveredById(requestOptions, signal);
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!id,
-    ...queryOptions,
-  } as UseQueryOptions<
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof transactionControllerFindAllNotDeliveredById>>,
     TError,
     TData
@@ -332,23 +160,18 @@ export const useTransactionControllerFindAllNotDeliveredById = <
     ReturnType<typeof transactionControllerFindAllNotDeliveredById>
   >,
   TError = void,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<
-          ReturnType<typeof transactionControllerFindAllNotDeliveredById>
-        >,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof transactionControllerFindAllNotDeliveredById>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions =
-    getTransactionControllerFindAllNotDeliveredByIdQueryOptions(id, options);
+    getTransactionControllerFindAllNotDeliveredByIdQueryOptions(options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
@@ -366,7 +189,6 @@ export const prefetchTransactionControllerFindAllNotDeliveredById = async <
   TError = void,
 >(
   queryClient: QueryClient,
-  id: string,
   options?: {
     query?: Partial<
       UseQueryOptions<
@@ -381,7 +203,7 @@ export const prefetchTransactionControllerFindAllNotDeliveredById = async <
   },
 ): Promise<QueryClient> => {
   const queryOptions =
-    getTransactionControllerFindAllNotDeliveredByIdQueryOptions(id, options);
+    getTransactionControllerFindAllNotDeliveredByIdQueryOptions(options);
 
   await queryClient.prefetchQuery(queryOptions);
 
@@ -394,38 +216,30 @@ export const getTransactionControllerFindAllNotDeliveredByIdSuspenseQueryOptions
       ReturnType<typeof transactionControllerFindAllNotDeliveredById>
     >,
     TError = void,
-  >(
-    id: string,
-    options?: {
-      query?: Partial<
-        UseSuspenseQueryOptions<
-          Awaited<
-            ReturnType<typeof transactionControllerFindAllNotDeliveredById>
-          >,
-          TError,
-          TData
-        >
-      >;
-      request?: SecondParameter<typeof customFetch>;
-    },
-  ) => {
+  >(options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<
+          ReturnType<typeof transactionControllerFindAllNotDeliveredById>
+        >,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  }) => {
     const { query: queryOptions, request: requestOptions } = options ?? {};
 
     const queryKey =
       queryOptions?.queryKey ??
-      getTransactionControllerFindAllNotDeliveredByIdQueryKey(id);
+      getTransactionControllerFindAllNotDeliveredByIdQueryKey();
 
     const queryFn: QueryFunction<
       Awaited<ReturnType<typeof transactionControllerFindAllNotDeliveredById>>
     > = ({ signal }) =>
-      transactionControllerFindAllNotDeliveredById(id, requestOptions, signal);
+      transactionControllerFindAllNotDeliveredById(requestOptions, signal);
 
-    return {
-      queryKey,
-      queryFn,
-      enabled: !!id,
-      ...queryOptions,
-    } as UseSuspenseQueryOptions<
+    return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
       Awaited<ReturnType<typeof transactionControllerFindAllNotDeliveredById>>,
       TError,
       TData
@@ -444,24 +258,18 @@ export const useTransactionControllerFindAllNotDeliveredByIdSuspense = <
     ReturnType<typeof transactionControllerFindAllNotDeliveredById>
   >,
   TError = void,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseSuspenseQueryOptions<
-        Awaited<
-          ReturnType<typeof transactionControllerFindAllNotDeliveredById>
-        >,
-        TError,
-        TData
-      >
-    >;
-    request?: SecondParameter<typeof customFetch>;
-  },
-): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof transactionControllerFindAllNotDeliveredById>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions =
     getTransactionControllerFindAllNotDeliveredByIdSuspenseQueryOptions(
-      id,
       options,
     );
 

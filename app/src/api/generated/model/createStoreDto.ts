@@ -5,7 +5,6 @@
  * The Food Waste App API description
  * OpenAPI spec version: 1.0.0
  */
-import type { ProductEntity } from './productEntity';
 
 export interface CreateStoreDto {
   address: string;
@@ -14,6 +13,5 @@ export interface CreateStoreDto {
   isActive: boolean;
   logoUrl: string;
   name: string;
-  products: ProductEntity[];
   userId: string;
 }

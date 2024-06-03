@@ -12,33 +12,32 @@ interface Order {
   isSelected: boolean;
 }
 
-const OrderCard: React.FC<Order> = ({ 
-  id, 
-  product,  
-  onClick,
-  isSelected, 
-}) => {
+const OrderCard: React.FC<Order> = ({ id, product, onClick, isSelected }) => {
+  const dateRange = formatDateRange(product.pickupStartTime, product.pickupEndTime);
   return (
     <IonCard
       button
       onClick={onClick}
-      className={`overflow-hidden rounded-lg shadow-md ${isSelected ? 'border-red-500' : ''}`}
+      className={`order-card-background overflow-hidden rounded-lg shadow-md ${isSelected ? 'border-red-500' : ''}`}
     >
-      <div className="">
-        <h3>{product.store.name}</h3>
-        <IonLabel color="card" className="text-size ml-2">
-          {formatDateRange(product.pickupStartTime, product.pickupEndTime).day},{' '}
-          {
-            formatDateRange(product.pickupStartTime, product.pickupEndTime)
-              .startTime
-          }{' '}
-          -{' '}
-          {
-            formatDateRange(product.pickupStartTime, product.pickupEndTime)
-              .endTime
-          }
-        </IonLabel>
+    <div className='flex justify-around'>
+      <div className='flex'>
+        <img
+          src={product.store.logoUrl}
+          alt={'Foto de logo'}
+          className="h-10 object-cover rounded-lg m-2"
+        />
       </div>
+      <div className="w-full p-3 items-center ml-1 ">
+        <div className='text-white'>
+          {product.store.name}
+        </div>
+        <div color="card" className="text-size text-white mt-1">
+          {dateRange.day},{' '}{dateRange.startTime}{' '}-{' '}{dateRange.endTime}
+        </div>
+      </div>
+    </div>
+
     </IonCard>
   );
 };

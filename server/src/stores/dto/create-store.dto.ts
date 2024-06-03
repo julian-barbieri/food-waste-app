@@ -32,9 +32,4 @@ export class CreateStoreDto {
     @IsOptional()
     isActive?: boolean = true;
 
-    @ApiProperty({ type: [ProductEntity] })
-    @IsArray()
-    products: ProductEntity[];
-
-
 }

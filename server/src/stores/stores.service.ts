@@ -19,9 +19,6 @@ export class StoresService {
         isActive: createStoreDto.isActive,
         latitude: 100,
         longitude: 100,
-        products: {
-          connect: createStoreDto.products.map(product => ({ id: product.id })),
-        },
       },
     });
   }
