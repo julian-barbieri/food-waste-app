@@ -27,7 +27,7 @@ const ProductList: React.FC = () => {
 
   return (
     <div className="flex justify-around">
-      <div className="w-full flex flex-col pl-10 pr-20">
+      <div className="flex w-full flex-col pl-10 pr-20">
         <div className=" ml-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
           {productData.map((item) => (
             <ProductCard
@@ -46,10 +46,9 @@ const ProductList: React.FC = () => {
       </div>
       {/*Divide line*/}
       <div className="rounded-2xl border border-orange" />
-      <div className=''>
+      <div className="">
         <Product id={selectedProduct} />
       </div>
-    
     </div>
   );
 };

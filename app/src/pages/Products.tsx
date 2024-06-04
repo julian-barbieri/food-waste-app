@@ -10,7 +10,7 @@ const Products: React.FC = () => {
     <IonPage>
       <IonContent scrollY>
         <Logo />
-        <Title text={'Stores'}></Title>
+        <Title text={'Locales'}></Title>
         <ProductList />
       </IonContent>
     </IonPage>

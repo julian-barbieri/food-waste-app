@@ -20,7 +20,7 @@ const Orders: React.FC<Props> = ({ userId }) => {
     <IonPage>
       <IonContent fullscreen>
         <Logo />
-        <Title text={'Orders'} />
+        <Title text={'Tus pedidos'} />
         <OrdersList />
       </IonContent>
     </IonPage>

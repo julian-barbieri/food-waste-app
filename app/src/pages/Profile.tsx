@@ -7,6 +7,7 @@ import {
 } from '@ionic/react';
 
 import Logo from '@/components/Logo';
+import ProfileForm from '@/components/ProfileForm';
 import Title from '@/components/Title';
 
 const Profile: React.FC = () => {
@@ -14,6 +15,8 @@ const Profile: React.FC = () => {
     <IonPage>
       <IonContent fullscreen>
         <Logo />
+        <Title text={'Datos personales'} />
+        <ProfileForm></ProfileForm>
       </IonContent>
     </IonPage>
   );

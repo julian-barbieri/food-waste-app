@@ -30,6 +30,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  //CREATE USER
   @Post()
   @ApiCreatedResponse({
     type: UserEntity,
@@ -39,6 +40,7 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  // GET ALL USERS
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -52,6 +54,7 @@ export class UserController {
     return users.map((user) => new UserEntity(user));
   }
 
+  //GET USER BY ID
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()

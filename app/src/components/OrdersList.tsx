@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
 
-import {
-  useTransactionControllerFindAllNotDeliveredById,
-} from '@/api';
+import { useTransactionControllerFindAllNotDeliveredById } from '@/api';
 
 import OrderCard from './OrderCard';
 import OrderProduct from './OrderProduct';
 import Product from './Product';
 
-/*interface Props {
-  userId: string;
-}*/
 const OrdersList = () => {
-  const { data, isLoading, error } = useTransactionControllerFindAllNotDeliveredById();
+  const { data, isLoading, error } =
+    useTransactionControllerFindAllNotDeliveredById();
   const [selectedOrder, setSelectedOrder] = useState('');
 
   const handleProductClick = (id: string) => {
@@ -32,10 +28,12 @@ const OrdersList = () => {
       <p className="flex h-full justify-center">No orders at the moment</p>
     );
   }
+
   const ordersData = data ?? [];
+
   return (
     <div className="flex justify-around">
-      <div className="flex flex-col pl-10 pr-20 w-full w-max-32">
+      <div className="w-max-32 flex w-full flex-col pl-10 pr-20">
         {ordersData.map((item) => (
           <OrderCard
             key={item.id}
@@ -46,10 +44,10 @@ const OrdersList = () => {
           />
         ))}
       </div>
-      {/*Divide line*/}
-      <div className="rounded-2xl mr-14 border border-orange" />
-      <div className="w-full items-center justify-center">
-        <OrderProduct  productId={selectedOrder} />
+      {/* Divide line */}
+      <div className="mr-14 flex-col rounded-2xl border border-orange" />
+      <div className="flex w-full flex-col items-center justify-center">
+        <OrderProduct productId={selectedOrder} />
       </div>
     </div>
   );

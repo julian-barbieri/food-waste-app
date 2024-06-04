@@ -33,7 +33,7 @@ const Product: React.FC<Props> = ({ id }) => {
   //Message when no product is selected
   if (!query.data) {
     return (
-      <div className="text-1xl pl-10 pr-10 font-mono font-bold">
+      <div className="text-1xl pl-10 pr-10 font-mono font-bold ">
         Seleccioná el producto que deseas ver
       </div>
     );
