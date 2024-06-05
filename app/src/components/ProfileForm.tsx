@@ -1,11 +1,12 @@
 import { IonButton, IonInput, IonItem, IonLabel } from '@ionic/react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ZodType, z } from 'zod';
 
-import { useAuthControllerMe } from '@/api';
+import { useAuthControllerMe, useUserControllerUpdate } from '@/api';
+import { useHistory } from 'react-router-dom';
 
 interface ProfileFormProps {
   // Define your props here
@@ -18,21 +19,38 @@ const ProfileForm: React.FC<ProfileFormProps> = () => {
     firstName: z.string(),
     lastName: z.string(),
   });
-
+  const history = useHistory();
+  const userUpdateMutation = useUserControllerUpdate({
+    mutation: {
+      onError: (error) => {
+        console.log({ error });
+      },
+      onSuccess: (data) => {
+        console.log({ data });
+      },
+    },
+  });
+  const query = useAuthControllerMe();
   type FormFields = z.infer<typeof schema>;
   const {
     register,
     handleSubmit,
+    setValue,
     watch,
     formState: { errors },
   } = useForm<FormFields>({
     resolver: zodResolver(schema),
   });
-  const onSubmit: SubmitHandler<FormFields> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<FormFields> = (data) => 
+    userUpdateMutation.mutate({data});
   
-  const query = useAuthControllerMe();
-
-
+  useEffect(() => {
+    if (query.data) {
+      setValue('email', query.data.email);
+      setValue('firstName', query.data.firstName);
+      setValue('lastName', query.data.lastName);
+    }
+  }, [query.data, setValue]);
 
   return (
     <div className="ml-14 mr-14 mt-10 flex justify-around">
@@ -44,7 +62,10 @@ const ProfileForm: React.FC<ProfileFormProps> = () => {
               <IonLabel className="text-dark font-semibold" position="stacked">
                 Nombre
               </IonLabel>
-              <IonInput value={query.data?.firstName}/>
+              <IonInput
+                defaultValue={query.data?.firstName}
+                {...register('firstName')}
+              />
             </IonItem>
 
             {/*Last name*/}
@@ -52,7 +73,10 @@ const ProfileForm: React.FC<ProfileFormProps> = () => {
               <IonLabel className="text-dark font-semibold" position="stacked">
                 Last name
               </IonLabel>
-              <IonInput value={query.data?.lastName}/>
+              <IonInput
+                defaultValue={query.data?.lastName} 
+                {...register('lastName')}
+              />
             </IonItem>
           </div>
 
@@ -61,7 +85,10 @@ const ProfileForm: React.FC<ProfileFormProps> = () => {
             <IonLabel className="text-dark font-semibold" position="stacked">
               Email
             </IonLabel>
-            <IonInput value={query.data?.email}/>
+            <IonInput 
+              defaultValue={query.data?.email}
+              {...register('email')}
+            />
           </IonItem>
 
           {/*Save button*/}
